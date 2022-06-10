@@ -125,7 +125,7 @@ if has('win32')
   runtime ./windows.vim
 endif
 
-runtime ./maps.vim
+runtime ./keymap.vim
 "}}}
 
 
