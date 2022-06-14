@@ -37,7 +37,8 @@ local mappings = {
   f = {
     name = "Find",
     b = { "<cmd>Telescope buffers<cr>", "Buffers" },
-    F = { "<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '-g', '!node_modules/**'} }<CR>", "Browser" },
+    F = { "<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '-g', '!node_modules/**'} }<CR>",
+      "Browser" },
     r = { "<cmd>Trouble lsp_references<cr>", "Find All References" },
     p = { "<cmd>Telescope git_files<cr>", "Git Files" },
     o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
@@ -67,7 +68,7 @@ local mappings = {
   v = {
     name = "Window",
     v = { "<cmd>vsplit<CR>", "Vertical Split" },
-    s = { "<cmd>split<CR>", "Horizontal Split"},
+    s = { "<cmd>split<CR>", "Horizontal Split" },
     h = { "<C-w><", "Resize left" },
     l = { "<C-w>>", "Resize right" },
     k = { "<C-w>+", "Resize up" },
@@ -83,7 +84,7 @@ local mappings = {
     U = { "<cmd>PlugUpgrade<cr>", "Upgrade" },
   },
 
-  g = {
+  G = {
     name = "Git",
     s = { "<cmd>Neogit<CR>", "Status" },
     b = { "<cmd>Git blame<CR>", "Blame" },
