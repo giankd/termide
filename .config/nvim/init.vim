@@ -104,9 +104,12 @@ au BufNewFile,BufRead *.tsx setf typescriptreact
 " Markdown
 au BufNewFile,BufRead *.md set filetype=markdown
 au BufNewFile,BufRead *.mdx set filetype=markdown
-set suffixesadd=.js,.es,.jsx,.json,.css,.less,.sass,.styl,.php,.py,.md
+" Config files (.*rc)
+au BufRead,BufNewFile *.*rc		set filetype=json
 
 autocmd FileType yaml setlocal shiftwidth=2 tabstop=2
+
+set suffixesadd=.js,.es,.jsx,.json,.css,.less,.sass,.styl,.php,.py,.md
 
 "}}}
 

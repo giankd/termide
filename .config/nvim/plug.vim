@@ -11,7 +11,6 @@ Plug 'tpope/vim-vinegar'
 if has("nvim")
     Plug 'Mofiqul/vscode.nvim'
     Plug 'hoob3rt/lualine.nvim'
-    " Plug 'airblade/vim-gitgutter'
     Plug 'lewis6991/gitsigns.nvim'
     Plug 'numToStr/Comment.nvim'
     Plug 'folke/which-key.nvim'
