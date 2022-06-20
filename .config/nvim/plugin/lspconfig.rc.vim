@@ -161,11 +161,13 @@ cssls_cap.textDocument.completion.completionItem.snippetSupport = true
 -- https://github.com/microsoft/vscode/issues/147674
 nvim_lsp.cssls.setup {
   cmd = { "vscode-css-language-server", "--stdio" },
+  filetypes = { "css", "sass", "scss" },
   on_attach = on_attach,
   capabilities = cssls_cap,
   settings = {
     css = {
-      validate = false,
+      -- DISABLE WITH
+      -- validate = false,
     },
   }
 }
