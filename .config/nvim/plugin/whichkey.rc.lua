@@ -71,8 +71,10 @@ local mappings = {
     s = { "<cmd>split<CR>", "Horizontal Split" },
     h = { "<C-w><", "Resize left" },
     l = { "<C-w>>", "Resize right" },
+    L = { "<C-w>|", "Fold vertical window" },
     k = { "<C-w>+", "Resize up" },
     j = { "<C-w>-", "Resize down" },
+    J = { "<C-w>_", "Fold horizontal window" },
   },
 
   z = {
@@ -95,7 +97,11 @@ local mappings = {
     P = { "<cmd>Git push<CR>", "Push" },
     f = { "<cmd>Git fetch<CR>", "Fetch" },
     c = { "<cmd>Git commit<CR>", "Commit" },
-    g = { "<cmd>GitGutterQuickFix<CR>", "Hunks" },
+    g = { "<cmd>Gitsigns preview_hunk<CR>", "Preview" },
+    a = { "<cmd>Gitsigns set_qflist<CR>", "Changes" },
+    k = { "<cmd>Gitsigns prev_hunk<CR>", "Prev Hunk" },
+    j = { "<cmd>Gitsigns next_hunk<CR>", "Next Hunk" },
+    r = { "<cmd>Gitsigns refresh<CR>", "Refresh" },
   },
   D = {
     name = "Debug",
