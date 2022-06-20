@@ -1,5 +1,4 @@
 nnoremap <silent> \\ <cmd>Telescope buffers<cr>
-nnoremap <silent> ;; <cmd>Telescope help_tags<cr>
 
 lua << EOF
 function telescope_buffer_dir()
