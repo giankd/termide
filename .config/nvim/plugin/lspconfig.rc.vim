@@ -2,6 +2,20 @@ lua << EOF
 --vim.lsp.set_log_level("debug")
 EOF
 
+function! ToggleFormatOnSave()
+    if !exists('#Format#BufWritePre')
+        augroup Format
+          autocmd! * <buffer>
+          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()
+        augroup END
+    else
+        augroup Format 
+            autocmd!
+        augroup END
+    endif
+endfunction
+
+
 lua << EOF
 local lsp_installer = require("nvim-lsp-installer")
 
@@ -48,13 +62,12 @@ local on_attach = function(client, bufnr)
   local keymap_c = {
     c = {
       name = "Code",
-      R = { "<cmd>Trouble lsp_references<cr>", "Find All References" },
       -- a = { "<cmd>Telescope lsp_code_actions<CR>", "Code Action" },
       -- a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
       a = { "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", "Code Action" },
       -- d = { "<cmd>lua vim.diagnostic.open_float()<CR>", "Line Diagnostics" },
       d = { "<cmd>Telescope diagnostics<CR>", "Diagnostics" },
-      F = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
+      R = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
       n = { "<cmd>Lspsaga rename<CR>", "Rename" },
       p = { "<cmd>Lspsaga preview_definition<CR>", "Definition" },
       r = { "<cmd>Telescope lsp_references<CR>", "Diagnostics" },
@@ -77,14 +90,12 @@ local on_attach = function(client, bufnr)
 
   -- formatting
   if client.resolved_capabilities.document_formatting then
-      -- buf_set_keymap("n", "<leader>lf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
       keymap_c.c.f = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format Document" }
-  end
-  if client.server_capabilities.documentFormattingProvider then
-    vim.api.nvim_command [[augroup Format]]
-    vim.api.nvim_command [[autocmd! * <buffer>]]
-    vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
-    vim.api.nvim_command [[augroup END]]
+      keymap_c.c.F = { "<cmd>call ToggleFormatOnSave()<CR>", "Toggle Format on save" }
+      --vim.api.nvim_command [[augroup Format]]
+      --vim.api.nvim_command [[autocmd! * <buffer>]]
+      --vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
+      --vim.api.nvim_command [[augroup END]]
   end
 
   local keymap_g = {
