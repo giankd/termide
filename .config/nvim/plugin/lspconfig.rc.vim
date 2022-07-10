@@ -2,19 +2,22 @@ lua << EOF
 --vim.lsp.set_log_level("debug")
 EOF
 
+function! ActivateFormatOnSave()
+    augroup Format
+      autocmd! * <buffer>
+      autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()
+    augroup END
+endfunction
+
 function! ToggleFormatOnSave()
     if !exists('#Format#BufWritePre')
-        augroup Format
-          autocmd! * <buffer>
-          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()
-        augroup END
+      call ActivateFormatOnSave()
     else
         augroup Format 
             autocmd!
         augroup END
     endif
 endfunction
-
 
 lua << EOF
 local lsp_installer = require("nvim-lsp-installer")
@@ -92,6 +95,7 @@ local on_attach = function(client, bufnr)
   if client.resolved_capabilities.document_formatting then
       keymap_c.c.f = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format Document" }
       keymap_c.c.F = { "<cmd>call ToggleFormatOnSave()<CR>", "Toggle Format on save" }
+      vim.call[[ActivateFormatOnSave]]
       --vim.api.nvim_command [[augroup Format]]
       --vim.api.nvim_command [[autocmd! * <buffer>]]
       --vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
@@ -230,6 +234,21 @@ nvim_lsp.sumneko_lua.setup {
 
 nvim_lsp.bashls.setup{
   on_attach = on_attach,
+  capabilities = capabilities,
+}
+
+nvim_lsp.gopls.setup{
+  on_attach = on_attach,
+  settings = {
+    gopls = {
+      experimentalPostfixCompletions = true,
+      analyses = {
+        unusedparams = true,
+        shadow = true,
+     },
+     staticcheck = true,
+    },
+  },
   capabilities = capabilities,
 }
 
