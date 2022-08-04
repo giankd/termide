@@ -120,6 +120,13 @@ local mappings = {
     x = { "<cmd>VimspectorReset<cr>", "Reset" },
     H = { "<cmd>lua require('config.vimspector').toggle_human_mode()<cr>", "Toggle HUMAN mode" },
   },
+  x = {
+    name = "QuickFixList",
+    x = { "<cmd>copen<CR>", "Open Quickfix" },
+    j = { "<cmd>cnext<CR>", "Next in Quickfix" },
+    k = { "<cmd>cprev<CR>", "Prev in Quickfix" },
+    X = { "<cmd>ccl<CR>", "Close Quickfix" },
+  }
 }
 
 whichkey.setup(conf)
