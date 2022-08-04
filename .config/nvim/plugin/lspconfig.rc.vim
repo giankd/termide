@@ -297,6 +297,7 @@ nvim_lsp.diagnosticls.setup {
         -- command = 'prettier_d_slim',
         command = 'prettier',
         rootPatterns = {
+          'package.json',
           '.prettierrc',
           '.prettierrc.json',
           '.prettierrc.toml',
@@ -309,7 +310,7 @@ nvim_lsp.diagnosticls.setup {
           'prettier.config.js',
           'prettier.config.cjs',
         },
-        requiredFiles = { 'prettier.config.js', '.prettierrc' },
+        requiredFiles = { 'package.json', 'prettier.config.js', '.prettierrc' },
         args = { '--stdin', '--stdin-filepath', '%filename' }
       }
     },
