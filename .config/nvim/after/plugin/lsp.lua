@@ -27,6 +27,15 @@ saga.init_lsp_saga({
 	-- preview lines of lsp_finder and definition preview
 	max_preview_lines = 10,
 	code_action_icon = "ϟ ",
+	-- if true can press number to execute the codeaction in codeaction window
+	code_action_num_shortcut = true,
+	code_action_lightbulb = {
+		enable = true,
+		sign = true,
+		enable_in_insert = true,
+		sign_priority = 20,
+		virtual_text = true,
+	},
 	finder_action_keys = {
 		open = "o",
 		vsplit = "s",
@@ -40,6 +49,9 @@ saga.init_lsp_saga({
 		quit = "q",
 		exec = "<CR>",
 	},
+	rename_action_quit = "<ESC>",
+	rename_in_select = true,
+	definition_preview_icon = "  ",
 })
 
 local protocol = require("vim.lsp.protocol")
@@ -113,11 +125,30 @@ local on_attach = function(client, bufnr)
 	end
 
 	-- Keymaps
-	nnoremap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-	nnoremap("[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
-	nnoremap("]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
-	nnoremap("[e", "<cmd>lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>")
-	nnoremap("]e", "<cmd>lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>")
+	-- nnoremap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+	nnoremap("K", "<cmd>Lspsaga hover_doc<CR>")
+	nnoremap("<C-j>", function()
+		require("lspsaga.action").smart_scroll_with_saga(1)
+	end)
+	nnoremap("<C-k>", function()
+		require("lspsaga.action").smart_scroll_with_saga(-1)
+	end)
+	-- nnoremap("[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
+	-- nnoremap("]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
+	-- nnoremap("[e", "<cmd>lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>")
+	-- nnoremap("]e", "<cmd>lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>")
+	nnoremap("]d", function()
+		require("lspsaga.diagnostic").goto_prev()
+	end)
+	nnoremap("[d", function()
+		require("lspsaga.diagnostic").goto_next()
+	end)
+	nnoremap("[e", function()
+		require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
+	end)
+	nnoremap("]e", function()
+		require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
+	end)
 
 	local whichkey = require("which-key")
 	local keymap_c = {
@@ -125,11 +156,13 @@ local on_attach = function(client, bufnr)
 			name = "Code",
 			a = { "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", "Code Action" },
 			d = { "<cmd>Telescope diagnostics<CR>", "Diagnostics" },
-			R = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
+			f = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
+			s = { "<cmd>Lspsaga signature_help<CR>", "Signature Help" },
 			n = { "<cmd>Lspsaga rename<CR>", "Rename" },
 			p = { "<cmd>Lspsaga preview_definition<CR>", "Definition" },
-			r = { "<cmd>Telescope lsp_references<CR>", "Diagnostics" },
-			t = { "<cmd>TroubleToggle<CR>", "Trouble" },
+			l = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Line Diagnostic" },
+			c = { "<cmd>Lspsaga show_cursor_diagnostics<CR>", "Cursor Diagnostic" },
+			r = { "<cmd>Telescope lsp_references<CR>", "References" },
 			i = {
 				'<cmd>lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<CR>',
 				"Organize Imports",
