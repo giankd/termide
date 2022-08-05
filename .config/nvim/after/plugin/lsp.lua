@@ -108,10 +108,9 @@ lsp_installer.setup({
 })
 
 local on_attach = function(client, bufnr)
-
-  if client.resolved_capabilities.document_formatting then
-      require("giankd.formatter").EnableFormatOnSave()
-  end
+	if client.resolved_capabilities.document_formatting then
+		require("giankd.formatter").EnableFormatOnSave()
+	end
 
 	-- Keymaps
 	nnoremap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")

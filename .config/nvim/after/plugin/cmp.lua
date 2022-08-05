@@ -16,7 +16,15 @@ cmp.setup({
 		["<C-j>"] = cmp.mapping.select_next_item(select_opt),
 		["<S-Tab>"] = cmp.mapping.select_prev_item(select_opt),
 		["<Tab>"] = cmp.mapping.select_next_item(select_opt),
-		["<C-K>"] = cmp.mapping.complete("menu,menuone,noinsert,noselect"),
+		["<C-x>"] = cmp.mapping.complete({
+			config = {
+				sources = {
+					{ name = "luasnip" },
+					{ name = "buffer" },
+					{ name = "nvim_lsp" },
+				},
+			},
+		}),
 		["<C-e>"] = cmp.mapping.close(),
 		["<CR>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Replace,
