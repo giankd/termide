@@ -1,33 +1,33 @@
-local dap = require("dap")
+--[[ local dap = require("dap")
 local dapui = require("dapui")
 local daptext = require("nvim-dap-virtual-text")
 
 local remap = require("giankd.keymap")
-local nnoremap = remap.nnoremap
+local nnoremap = remap.nnoremap ]]
 
-daptext.setup()
-dapui.setup({
-  layouts = {
-    {
-      elements = {
-        "console",
-      },
-      size = 7,
-      position = "bottom",
-    },
-    {
-      elements = {
-        -- Elements can be strings or table with id and size keys.
-        { id = "scopes", size = 0.25 },
-        "watches",
-      },
-      size = 40,
-      position = "left",
-    }
-  },
-})
+-- daptext.setup()
+--[[ dapui.setup({
+	layouts = {
+		{
+			elements = {
+				"console",
+			},
+			size = 7,
+			position = "bottom",
+		},
+		{
+			elements = {
+				-- Elements can be strings or table with id and size keys.
+				{ id = "scopes", size = 0.25 },
+				"watches",
+			},
+			size = 40,
+			position = "left",
+		},
+	},
+}) ]]
 
-dap.listeners.after.event_initialized["dapui_config"] = function()
+--[[ dap.listeners.after.event_initialized["dapui_config"] = function()
   dapui.open(1)
 end
 dap.listeners.before.event_terminated["dapui_config"] = function()
@@ -35,12 +35,12 @@ dap.listeners.before.event_terminated["dapui_config"] = function()
 end
 dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
-end
+end ]]
 
 -- TBD
 -- require("giankd.debugger.node");
 
-nnoremap("<Home>", function()
+--[[ nnoremap("<Home>", function()
   dapui.toggle(1)
 end)
 nnoremap("<End>", function()
@@ -71,4 +71,4 @@ nnoremap("<Leader>B", function()
 end)
 nnoremap("<leader>rc", function()
   dap.run_to_cursor()
-end)
+end) ]]
