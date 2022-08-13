@@ -5,15 +5,23 @@ local format_group = augroup("Format", {})
 
 local autocmd = vim.api.nvim_create_autocmd
 
+M.Format = function ()
+    vim.cmd("FormatLock")
+end
+
+M.FormatSelection = function ()
+    vim.cmd("FormatLock")
+end
+
 M.isFormatOnSaveEnabled = false
 
 M.EnableFormatOnSave = function()
 	M.isFormatOnSaveEnabled = true
-	autocmd("BufWritePre", {
+	autocmd("BufWritePost", {
 		group = format_group,
 		pattern = "*",
 		callback = function()
-			local ran, errorMsg = pcall(vim.cmd, "silent Neoformat")
+			local ran, errorMsg = pcall(vim.cmd, "silent FormatWriteLock")
 			if not ran then
 				error("Error in formatting file" .. errorMsg)
 			end

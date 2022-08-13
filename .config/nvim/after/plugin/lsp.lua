@@ -1,4 +1,3 @@
-local lsp_installer = require("nvim-lsp-installer")
 local nvim_lsp = require("lspconfig")
 local Remap = require("giankd.keymap")
 local nnoremap = Remap.nnoremap
@@ -107,17 +106,19 @@ local protocolCompletionIcons = {
 --     })
 --   end
 -- end
-
-lsp_installer.setup({
-	automatic_installation = true,
-	ui = {
-		icons = {
-			server_installed = "✓",
-			server_pending = "➜",
-			server_uninstalled = "✗",
-		},
-	},
-})
+require("mason").setup {
+     ui = {
+         icons = {
+             package_installed = "✓",
+			package_pending = "➜",
+			package_uninstalled = "✗",
+         }
+     }
+ }
+ require("mason-lspconfig").setup {
+     -- ensure_installed = { "sumneko_lua" },
+     automatic_installation = true
+ }
 
 local on_attach = function(client, bufnr)
     print("Attaching " .. client.name)
@@ -127,7 +128,6 @@ local on_attach = function(client, bufnr)
 	end
 
 	-- Keymaps
-	-- nnoremap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
 	nnoremap("K", "<cmd>Lspsaga hover_doc<CR>")
 	nnoremap("<C-j>", function()
 		require("lspsaga.action").smart_scroll_with_saga(1)
@@ -135,10 +135,6 @@ local on_attach = function(client, bufnr)
 	nnoremap("<C-k>", function()
 		require("lspsaga.action").smart_scroll_with_saga(-1)
 	end)
-	-- nnoremap("[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
-	-- nnoremap("]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
-	-- nnoremap("[e", "<cmd>lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>")
-	-- nnoremap("]e", "<cmd>lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>")
 	nnoremap("]d", function()
 		require("lspsaga.diagnostic").goto_prev()
 	end)
@@ -174,6 +170,7 @@ local on_attach = function(client, bufnr)
 			name = "LSP",
 			i = { "<cmd>LspInfo<CR>", "Lsp Info" },
 			r = { "<cmd>LspRestart<CR>", "Lsp Restart" },
+            m = { "<cmd>Mason<CR>", "Mason UI" },
 		},
 	}
 

@@ -79,11 +79,12 @@ return require("packer").startup(function(use)
 	use("nvim-telescope/telescope.nvim")
 	use("numToStr/Comment.nvim")
 	use("folke/which-key.nvim")
-	use("sbdchd/neoformat")
+    use { 'mhartington/formatter.nvim' }
 
 	-- LSP Plugs
 	use("neovim/nvim-lspconfig")
-	use("williamboman/nvim-lsp-installer")
+    use { "williamboman/mason.nvim" }
+    use { "williamboman/mason-lspconfig.nvim" }
 	use("folke/lsp-colors.nvim")
 	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-nvim-lsp")
