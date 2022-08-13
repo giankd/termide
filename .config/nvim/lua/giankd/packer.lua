@@ -1,3 +1,58 @@
+return require("packer").startup(function(use)
+	use("wbthomason/packer.nvim")
+
+	-- ColorScheme
+	use("Mofiqul/vscode.nvim")
+
+	-- Lualine
+	use({
+		"nvim-lualine/lualine.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	})
+
+	-- Git
+	use("tpope/vim-fugitive")
+	use("lewis6991/gitsigns.nvim")
+	-- Github
+	use("tpope/vim-rhubarb")
+	-- Netrw
+	use("tpope/vim-vinegar")
+
+	-- Lot of utils
+	use("nvim-lua/plenary.nvim")
+	use("nvim-lua/popup.nvim")
+	use("nvim-telescope/telescope.nvim")
+	use("numToStr/Comment.nvim")
+	use("folke/which-key.nvim")
+	use({ "mhartington/formatter.nvim" })
+
+	-- LSP Plugs
+	use("neovim/nvim-lspconfig")
+	use({ "williamboman/mason.nvim" })
+	use({ "williamboman/mason-lspconfig.nvim" })
+	use("folke/lsp-colors.nvim")
+	use("hrsh7th/nvim-cmp")
+	use("hrsh7th/cmp-nvim-lsp")
+	use("hrsh7th/cmp-buffer")
+	use("hrsh7th/cmp-path")
+	use("onsails/lspkind-nvim")
+	use("nvim-lua/lsp_extensions.nvim")
+	use("glepnir/lspsaga.nvim")
+	use("L3MON4D3/LuaSnip")
+	use("saadparwaiz1/cmp_luasnip")
+	use("simrat39/symbols-outline.nvim")
+
+	-- Treesitter
+	use("nvim-treesitter/nvim-treesitter", {
+		run = ":TSUpdate",
+	})
+
+	-- Debugger
+	use("mfussenegger/nvim-dap")
+	use("rcarriga/nvim-dap-ui")
+	use("theHamsta/nvim-dap-virtual-text")
+end)
+
 --[[
     --
 	-- Lazy loading:
@@ -52,58 +107,3 @@
 	use {'dracula/vim', as = 'dracula'}
 	end)
 	--]]
-
-return require("packer").startup(function(use)
-	use("wbthomason/packer.nvim")
-
-	-- ColorScheme
-	use("Mofiqul/vscode.nvim")
-
-	-- Lualine
-	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	})
-
-	-- Git
-	use("tpope/vim-fugitive")
-	use("lewis6991/gitsigns.nvim")
-	-- Github
-	use("tpope/vim-rhubarb")
-	-- Netrw
-	use("tpope/vim-vinegar")
-
-	-- Lot of utils
-	use("nvim-lua/plenary.nvim")
-	use("nvim-lua/popup.nvim")
-	use("nvim-telescope/telescope.nvim")
-	use("numToStr/Comment.nvim")
-	use("folke/which-key.nvim")
-    use { 'mhartington/formatter.nvim' }
-
-	-- LSP Plugs
-	use("neovim/nvim-lspconfig")
-    use { "williamboman/mason.nvim" }
-    use { "williamboman/mason-lspconfig.nvim" }
-	use("folke/lsp-colors.nvim")
-	use("hrsh7th/nvim-cmp")
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-buffer")
-	use("hrsh7th/cmp-path")
-	use("onsails/lspkind-nvim")
-	use("nvim-lua/lsp_extensions.nvim")
-	use("glepnir/lspsaga.nvim")
-	use("L3MON4D3/LuaSnip")
-	use("saadparwaiz1/cmp_luasnip")
-	use("simrat39/symbols-outline.nvim")
-
-	-- Treesitter
-	use("nvim-treesitter/nvim-treesitter", {
-		run = ":TSUpdate",
-	})
-
-	-- Debugger
-	use("mfussenegger/nvim-dap")
-	use("rcarriga/nvim-dap-ui")
-	use("theHamsta/nvim-dap-virtual-text")
-end)
