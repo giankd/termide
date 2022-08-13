@@ -36,6 +36,30 @@ require("formatter").setup({
         }
       end ]]
 		},
+		typescript = {
+			require("formatter.filetypes.typescript").prettierd,
+		},
+		typescriptreact = {
+			require("formatter.filetypes.typescriptreact").prettierd,
+		},
+		javascript = {
+			require("formatter.filetypes.javascript").prettierd,
+		},
+		javascriptreact = {
+			require("formatter.filetypes.javascriptreact").prettierd,
+		},
+		css = {
+			require("formatter.filetypes.css").prettierd,
+		},
+		scss = {
+			require("formatter.filetypes.css").prettierd,
+		},
+		json = {
+			require("formatter.filetypes.json").fixjson,
+		},
+		sh = {
+			require("formatter.filetypes.sh").shfmt,
+		},
 
 		-- Use the special "*" filetype for defining formatter configurations on
 		-- any filetype
