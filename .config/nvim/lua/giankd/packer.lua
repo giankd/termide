@@ -25,6 +25,8 @@ return require("packer").startup(function(use)
 	use("numToStr/Comment.nvim")
 	use("folke/which-key.nvim")
 	use({ "mhartington/formatter.nvim" })
+	use("windwp/nvim-autopairs")
+	use("windwp/nvim-ts-autotag")
 
 	-- LSP Plugs
 	use("neovim/nvim-lspconfig")
