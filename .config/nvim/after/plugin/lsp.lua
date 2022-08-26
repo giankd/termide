@@ -106,22 +106,22 @@ local protocolCompletionIcons = {
 --     })
 --   end
 -- end
-require("mason").setup {
-     ui = {
-         icons = {
-             package_installed = "✓",
+require("mason").setup({
+	ui = {
+		icons = {
+			package_installed = "✓",
 			package_pending = "➜",
 			package_uninstalled = "✗",
-         }
-     }
- }
- require("mason-lspconfig").setup {
-     -- ensure_installed = { "sumneko_lua" },
-     automatic_installation = true
- }
+		},
+	},
+})
+require("mason-lspconfig").setup({
+	-- ensure_installed = { "sumneko_lua" },
+	automatic_installation = true,
+})
 
 local on_attach = function(client, bufnr)
-    print("Attaching " .. client.name)
+	print("Attaching " .. client.name)
 
 	if client.resolved_capabilities.document_formatting then
 		require("giankd.formatter").EnableFormatOnSave()
@@ -152,7 +152,7 @@ local on_attach = function(client, bufnr)
 	local keymap_c = {
 		c = {
 			name = "Code",
-			a = { "<cmd>lua require('lspsaga.codeaction').code_action()<CR>", "Code Action" },
+			a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
 			d = { "<cmd>Telescope diagnostics<CR>", "Diagnostics" },
 			f = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
 			s = { "<cmd>Lspsaga signature_help<CR>", "Signature Help" },
@@ -170,14 +170,14 @@ local on_attach = function(client, bufnr)
 			name = "LSP",
 			i = { "<cmd>LspInfo<CR>", "Lsp Info" },
 			r = { "<cmd>LspRestart<CR>", "Lsp Restart" },
-            m = { "<cmd>Mason<CR>", "Mason UI" },
+			m = { "<cmd>Mason<CR>", "Mason UI" },
 		},
 	}
 
 	local keymap_c_visual = {
 		c = {
 			name = "Code",
-			a = { "<cmd>lua require('lspsaga.codeaction').range_code_action()<CR>", "Code Action" },
+			a = { "<cmd>Lspsaga range_code_action<CR>", "Code Action" },
 		},
 	}
 
