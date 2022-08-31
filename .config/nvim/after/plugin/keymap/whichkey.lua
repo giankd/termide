@@ -50,6 +50,12 @@ local mappings = {
 		w = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Current Buffer" },
 	},
 
+	A = {
+		name = "Fold",
+		c = { "zf%", "Fold matching character" },
+		b = { "zfi{", "Fold bracket block" },
+	},
+
 	b = {
 		name = "Buffer",
 		Q = { "<cmd>%bd|e#|bd#<CR>", "Delete all buffers" },
