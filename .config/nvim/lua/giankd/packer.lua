@@ -2,7 +2,7 @@ return require("packer").startup(function(use)
 	use("wbthomason/packer.nvim")
 
 	-- ColorScheme
-	use("Mofiqul/vscode.nvim")
+	use({ "catppuccin/nvim", as = "catppuccin", run = ":CatppuccinCompile" })
 
 	-- Lualine
 	use({

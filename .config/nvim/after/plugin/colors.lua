@@ -1,24 +1,64 @@
-vim.o.background = 'dark'
-local c = require('vscode.colors')
-require('vscode').setup({
-  -- Enable transparent background
-  transparent = true,
+-- Also :Catppuccin <flavour>
+vim.g.catppuccin_flavour = "mocha" -- latte, frappe, macchiato, mocha
 
-  -- Enable italic comment
-  italic_comments = false,
-
-  -- Disable nvim-tree background color
-  disable_nvimtree_bg = true,
-
-  -- Override colors (see ./lua/vscode/colors.lua)
-  color_overrides = {
-    -- vscLineNumber = '#FFFFFF',
-  },
-
-  -- Override highlight groups (see ./lua/vscode/theme.lua)
-  group_overrides = {
-    -- this supports the same val table as vim.api.nvim_set_hl
-    -- use colors from this colorscheme by requiring vscode.colors!
-    Cursor = { fg = c.vscDarkBlue, bg = c.vscLightGreen, bold = true },
-  }
+require("catppuccin").setup({
+	transparent_background = true,
+	term_colors = false,
+	compile = {
+		enabled = false,
+		path = vim.fn.stdpath("cache") .. "/catppuccin",
+	},
+	dim_inactive = {
+		enabled = true,
+		shade = "dark",
+		percentage = 0.15,
+	},
+	styles = {
+		comments = {},
+		conditionals = {},
+		loops = {},
+		functions = {},
+		keywords = {},
+		strings = {},
+		variables = {},
+		numbers = {},
+		booleans = {},
+		properties = {},
+		types = {},
+		operators = {},
+	},
+	integrations = {
+		-- For various plugins integrations see https://github.com/catppuccin/nvim#integrations
+		cmp = true,
+		gitsigns = true,
+		lsp_saga = false,
+		telescope = true,
+		treesitter = true,
+		which_key = true,
+		-- Special integrations, see https://github.com/catppuccin/nvim#special-integrations
+		-- TODO
+		dap = {
+			enabled = false,
+			enable_ui = false,
+		},
+		native_lsp = {
+			enabled = true,
+			virtual_text = {
+				errors = { "italic" },
+				hints = { "italic" },
+				warnings = { "italic" },
+				information = { "italic" },
+			},
+			underlines = {
+				errors = { "underline" },
+				hints = { "underline" },
+				warnings = { "underline" },
+				information = { "underline" },
+			},
+		},
+	},
+	color_overrides = {},
+	highlight_overrides = {},
 })
+
+vim.cmd([[colorscheme catppuccin]])
