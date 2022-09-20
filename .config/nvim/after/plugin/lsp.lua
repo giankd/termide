@@ -19,10 +19,6 @@ saga.init_lsp_saga({
 	-- entry is a table type has these filed
 	-- { bufnr, code, col, end_col, end_lnum, lnum, message, severity, source }
 	diagnostic_header = { "✘ ", "❯ ", "✦ ", "◈ " },
-	-- show diagnostic source
-	show_diagnostic_source = true,
-	-- add bracket or something with diagnostic source, just have 2 elements
-	diagnostic_source_bracket = {},
 	-- preview lines of lsp_finder and definition preview
 	max_preview_lines = 10,
 	code_action_icon = "ϟ ",
@@ -30,11 +26,23 @@ saga.init_lsp_saga({
 	code_action_num_shortcut = true,
 	code_action_lightbulb = {
 		enable = true,
-		sign = true,
 		enable_in_insert = true,
+		cache_code_action = true,
+		sign = true,
+		update_time = 150,
 		sign_priority = 20,
 		virtual_text = true,
 	},
+	-- finder icons
+	finder_icons = {
+		def = "  ",
+		ref = " ",
+		link = "  ",
+	},
+	-- finder do lsp request timeout
+	-- if your project big enough or your server very slow
+	-- you may need to increase this value
+	finder_request_timeout = 1500,
 	finder_action_keys = {
 		open = "o",
 		vsplit = "s",
@@ -48,9 +56,44 @@ saga.init_lsp_saga({
 		quit = "q",
 		exec = "<CR>",
 	},
+	definition_action_keys = {
+		edit = "<C-c>o",
+		vsplit = "<C-c>v",
+		split = "<C-c>i",
+		tabe = "<C-c>t",
+		quit = "q",
+	},
 	rename_action_quit = "<ESC>",
 	rename_in_select = true,
-	definition_preview_icon = "  ",
+	-- show symbols in winbar must nightly
+	symbol_in_winbar = {
+		in_custom = false,
+		enable = false,
+		separator = " ",
+		show_file = true,
+		click_support = false,
+	},
+	-- show outline
+	show_outline = {
+		win_position = "right",
+		--set special filetype win that outline window split.like NvimTree neotree
+		-- defx, db_ui
+		win_with = "",
+		win_width = 30,
+		auto_enter = true,
+		auto_preview = true,
+		virt_text = "┃",
+		jump_key = "o",
+		-- auto refresh when change buffer
+		auto_refresh = true,
+	},
+	-- custom lsp kind
+	-- usage { Field = 'color code'} or {Field = {your icon, your color code}}
+	custom_kind = {},
+	-- if you don't use nvim-lspconfig you must pass your server name and
+	-- the related filetypes into this table
+	-- like server_filetype_map = { metals = { "sbt", "scala" } }
+	server_filetype_map = {},
 })
 
 local protocol = require("vim.lsp.protocol")
@@ -158,6 +201,7 @@ local on_attach = function(client, bufnr)
 			s = { "<cmd>Lspsaga signature_help<CR>", "Signature Help" },
 			n = { "<cmd>Lspsaga rename<CR>", "Rename" },
 			p = { "<cmd>Lspsaga preview_definition<CR>", "Definition" },
+			o = { "<cmd>LSoutlineToggle<CR>", "Outline" },
 			l = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Line Diagnostic" },
 			c = { "<cmd>Lspsaga show_cursor_diagnostics<CR>", "Cursor Diagnostic" },
 			r = { "<cmd>Telescope lsp_references<CR>", "References" },
