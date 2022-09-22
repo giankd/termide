@@ -3,6 +3,7 @@ return require("packer").startup(function(use)
 
 	-- ColorScheme
 	use({ "catppuccin/nvim", as = "catppuccin", run = ":CatppuccinCompile" })
+	use({ "kyazdani42/nvim-web-devicons" })
 
 	-- Lualine
 	use({
