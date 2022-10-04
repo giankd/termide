@@ -36,6 +36,9 @@ require("formatter").setup({
         }
       end ]]
 		},
+		go = {
+			require("formatter.filetypes.go").gofmt,
+		},
 		typescript = {
 			require("formatter.filetypes.typescript").prettierd,
 		},
