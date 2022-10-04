@@ -166,7 +166,7 @@ require("mason-lspconfig").setup({
 local on_attach = function(client, bufnr)
 	print("Attaching " .. client.name)
 
-	if client.resolved_capabilities.document_formatting then
+	if client.server_capabilities.document_formatting then
 		require("giankd.formatter").EnableFormatOnSave()
 	end
 
