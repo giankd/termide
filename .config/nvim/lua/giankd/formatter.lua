@@ -5,12 +5,12 @@ local format_group = augroup("Format", {})
 
 local autocmd = vim.api.nvim_create_autocmd
 
-M.Format = function ()
-    vim.cmd("FormatLock")
+M.Format = function()
+	vim.cmd("FormatLock")
 end
 
-M.FormatSelection = function ()
-    vim.cmd("FormatLock")
+M.FormatSelection = function()
+	vim.cmd("FormatLock")
 end
 
 M.isFormatOnSaveEnabled = false
@@ -37,6 +37,14 @@ M.ToggleFormatOnSave = function()
 		M.isFormatOnSaveEnabled = false
 		print("Disabling format on save")
 		vim.api.nvim_command("autocmd! Format")
+	end
+end
+
+M.GetFormatOnSaveStatus = function()
+	if not M.isFormatOnSaveEnabled then
+		print("Format on save disabled")
+	else
+		print("Format on save enabled")
 	end
 end
 
