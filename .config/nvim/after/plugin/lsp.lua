@@ -172,12 +172,6 @@ local on_attach = function(client, bufnr)
 
 	-- Keymaps
 	nnoremap("K", "<cmd>Lspsaga hover_doc<CR>")
-	nnoremap("<C-j>", function()
-		require("lspsaga.action").smart_scroll_with_saga(1)
-	end)
-	nnoremap("<C-k>", function()
-		require("lspsaga.action").smart_scroll_with_saga(-1)
-	end)
 	nnoremap("]d", function()
 		require("lspsaga.diagnostic").goto_prev()
 	end)
@@ -244,7 +238,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- Set up completion using nvim_cmp with LSP source
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local lsp_defaults = {
 	flags = {
