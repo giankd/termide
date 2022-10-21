@@ -45,6 +45,12 @@ return require("packer").startup(function(use)
 	use("saadparwaiz1/cmp_luasnip")
 	use("simrat39/symbols-outline.nvim")
 
+	-- Dart / Flutter
+	use("dart-lang/dart-vim-plugin")
+	use("vim-flutter")
+	use("vim-lsc")
+	use("vim-lsc-dart")
+
 	-- Treesitter
 	use("nvim-treesitter/nvim-treesitter", {
 		run = ":TSUpdate",

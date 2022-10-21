@@ -36,6 +36,21 @@ require("formatter").setup({
         }
       end ]]
 		},
+		-- TODO PR for default?
+		dart = {
+			function()
+				print("Formatting with dart default formatter")
+				local util = require("formatter.util")
+				return {
+					exe = "dart",
+					args = {
+						"format",
+						util.escape_path(util.get_current_buffer_file_path()),
+					},
+					stdin = true,
+				}
+			end,
+		},
 		go = {
 			require("formatter.filetypes.go").gofmt,
 		},
@@ -96,6 +111,7 @@ local nmappings = {
 		name = "Format",
 		f = { "<Cmd>lua require('giankd.formatter').Format()<CR>", "Format File" },
 		t = { "<Cmd>lua require('giankd.formatter').ToggleFormatOnSave()<CR>", "Toggle Format on Save" },
+		s = { "<Cmd>lua require('giankd.formatter').GetFormatOnSaveStatus()<CR>", "Format on Save Status" },
 	},
 }
 -- Formatter does not support selection format
