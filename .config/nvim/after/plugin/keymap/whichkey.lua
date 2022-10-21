@@ -42,7 +42,6 @@ local mappings = {
 			"<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '-g', '!node_modules/**'} }<CR>",
 			"Browser",
 		},
-		r = { "<cmd>Trouble lsp_references<cr>", "Find All References" },
 		p = { "<cmd>Telescope git_files<cr>", "Git Files" },
 		o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
 		f = { "<cmd>Telescope live_grep<cr>", "Live Grep" },
@@ -59,7 +58,7 @@ local mappings = {
 	b = {
 		name = "Buffer",
 		Q = { "<cmd>%bd|e#|bd#<CR>", "Delete all buffers" },
-		l = { "<cmd>Telescope buffers<CR>", "All buffers" },
+        l = { "<cmd>lua require('giankd.telescope').buffers()<CR>", "Show open buffers"},
 		L = { "<cmd>buffers<CR>", "List buffers" },
 	},
 
