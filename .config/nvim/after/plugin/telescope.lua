@@ -18,6 +18,7 @@ telescope.setup {
         ["<C-k>"] = actions.move_selection_previous,
         ["<C-n>"] = actions.cycle_history_next,
         ["<C-p>"] = actions.cycle_history_prev,
+        ["<C-x>"] = actions.delete_buffer,
       },
       n = {
         ["q"] = actions.close
