@@ -55,22 +55,22 @@ require("formatter").setup({
 			require("formatter.filetypes.go").gofmt,
 		},
 		typescript = {
-			require("formatter.filetypes.typescript").prettierd,
+			require("formatter.filetypes.typescript").prettier,
 		},
 		typescriptreact = {
-			require("formatter.filetypes.typescriptreact").prettierd,
+			require("formatter.filetypes.typescriptreact").prettier,
 		},
 		javascript = {
-			require("formatter.filetypes.javascript").prettierd,
+			require("formatter.filetypes.javascript").prettier,
 		},
 		javascriptreact = {
-			require("formatter.filetypes.javascriptreact").prettierd,
+			require("formatter.filetypes.javascriptreact").prettier,
 		},
 		css = {
-			require("formatter.filetypes.css").prettierd,
+			require("formatter.filetypes.css").prettier,
 		},
 		scss = {
-			require("formatter.filetypes.css").prettierd,
+			require("formatter.filetypes.css").prettier,
 		},
 		json = {
 			require("formatter.filetypes.json").fixjson,
