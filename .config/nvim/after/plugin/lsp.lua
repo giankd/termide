@@ -124,31 +124,6 @@ local protocolCompletionIcons = {
 	"ﬦ", -- Operator
 	"", -- TypeParameter
 }
-
--- local augroup = vim.api.nvim_create_augroup
--- local autocmd = vim.api.nvim_create_autocmd
--- FormatGroup = augroup('Format', {})
-
--- local function EnableFormatOnSave()
---   autocmd('BufferWritePre', {
---     group = FormatGroup,
---     pattern = '*',
---     callback = function()
---       vim.lsp.buf.formatting_seq_sync()
---     end
---   })
--- end
---
--- local function ToggleFormatOnSave()
---   if not vim.fn.exists('#Format#BufWritePre') then
---     EnableFormatOnSave()
---   else
---     autocmd('BufferWritePre', {
---       group = FormatGroup,
---       command = 'silent!'
---     })
---   end
--- end
 require("mason").setup({
 	ui = {
 		icons = {
@@ -166,8 +141,16 @@ require("mason-lspconfig").setup({
 local on_attach = function(client, bufnr)
 	print("Attaching " .. client.name)
 
-	if client.server_capabilities.document_formatting then
-		require("giankd.formatter").EnableFormatOnSave()
+	local serverCapabilities = client.server_capabilities
+	if serverCapabilities.document_formatting or serverCapabilities.documentFormattingProvider then
+		local status, f = pcall(require, "giankd.formatter")
+		if not status then
+			print("Unable to require formatter module")
+		else
+			f.EnableFormatOnSave()
+		end
+	else
+		print("Client " .. client.name .. " has no document_formatting or documentFormattingProvider")
 	end
 
 	-- Keymaps
