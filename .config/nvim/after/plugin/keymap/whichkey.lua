@@ -60,6 +60,7 @@ local mappings = {
 		Q = { "<cmd>%bd|e#|bd#<CR>", "Delete all buffers" },
 		l = { "<cmd>Telescope buffers<CR>", "Show open buffers" },
 		L = { "<cmd>buffers<CR>", "List buffers" },
+		c = { "<cmd>TSContextToggle<CR>", "Toggle Context" },
 	},
 
 	t = {
