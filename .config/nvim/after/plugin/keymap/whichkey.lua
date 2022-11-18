@@ -58,7 +58,7 @@ local mappings = {
 	b = {
 		name = "Buffer",
 		Q = { "<cmd>%bd|e#|bd#<CR>", "Delete all buffers" },
-        l = { "<cmd>Telescope buffers<CR>", "Show open buffers"},
+		l = { "<cmd>Telescope buffers<CR>", "Show open buffers" },
 		L = { "<cmd>buffers<CR>", "List buffers" },
 	},
 
