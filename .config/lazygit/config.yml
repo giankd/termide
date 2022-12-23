@@ -71,3 +71,8 @@ customCommands:
     context: "files"
     loadingText: "opening commitizen commit tool"
     subprocess: true
+git:
+  merging:
+    args: "--no-ff"
+gui:
+  showIcons: true
