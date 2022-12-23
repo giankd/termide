@@ -85,6 +85,7 @@ require("gitsigns").setup({
 					end,
 					"Blame Line",
 				},
+				["B"] = { "<cmd>Git blame", "Blame mode (Fugitive)" },
 				["tb"] = { gs.toggle_current_line_blame, "Toggle Blame Line" },
 				["d"] = { gs.diffthis, "Diff" },
 				["D"] = {
