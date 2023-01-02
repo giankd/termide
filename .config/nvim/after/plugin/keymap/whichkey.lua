@@ -1,12 +1,28 @@
 local whichkey = require("which-key")
+local telescope = require("telescope.builtin")
 
 local conf = {
 	ignore_missing = true,
+	spelling = {
+		enabled = true,
+		suggestions = 10,
+	},
 	window = {
 		border = "single", -- none, single, double, shadow
 		position = "bottom", -- bottom, top
 	},
 }
+
+local isOpen = false
+local function toggle_qflist()
+	if isOpen then
+		vim.cmd({ cmd = "cclose" })
+		isOpen = false
+	else
+		vim.cmd({ cmd = "copen" })
+		isOpen = true
+	end
+end
 
 local opts = {
 	mode = "n", -- Normal mode
@@ -37,16 +53,26 @@ local mappings = {
 
 	f = {
 		name = "Find",
-		b = { "<cmd>Telescope buffers<cr>", "Buffers" },
 		F = {
-			"<cmd>lua require('telescope.builtin').find_files{ find_command = {'rg', '--files', '--hidden', '-g', '!node_modules/**'} }<CR>",
-			"Browser",
+			function()
+				telescope.find_files({ find_command = { "rg", "--files", "--hidden", "-g", "!node_modules/**" } })
+			end,
+			"Browse All Files",
 		},
-		p = { "<cmd>Telescope git_files<cr>", "Git Files" },
-		o = { "<cmd>Telescope oldfiles<cr>", "Old Files" },
-		f = { "<cmd>Telescope live_grep<cr>", "Live Grep" },
-		c = { "<cmd>Telescope commands<cr>", "Commands" },
-		w = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Current Buffer" },
+		p = { telescope.git_files, "Git Files" },
+		q = { telescope.quickfix, "QuickFix Elements" },
+		s = { telescope.spell_suggest, "Spell Suggestions" },
+		g = {
+			name = "Git",
+			b = { telescope.git_branches, "Branches" },
+			s = { telescope.git_status, "Status" },
+			S = { telescope.git_stash, "Stashes" },
+			c = { telescope.git_commits, "Commits" },
+			d = { telescope.git_bcommits, "Diff Commits" },
+		},
+		f = { telescope.live_grep, "Live Grep" },
+		c = { "<cmd>Cheatsheet<CR>", "Commands" },
+		w = { telescope.current_buffer_fuzzy_find, "Current Buffer" },
 	},
 
 	A = {
@@ -95,14 +121,6 @@ local mappings = {
 		u = { "<cmd>PackerUpdate<cr>", "Update" },
 	},
 
-	G = {
-		name = "Git",
-		m = { "<cmd>Git mergetool<CR>", "Merge tool" },
-		l = { "<cmd>Gclog<CR>", "Log" },
-		f = { "<cmd>Git fetch<CR>", "Fetch" },
-		c = { "<cmd>Git commit<CR>", "Commit" },
-		a = { "<cmd>Gitsigns set_qflist<CR>", "Changes" },
-	},
 	D = {
 		name = "Debug",
 		G = { "<cmd>lua require('config.vimspector').generate_debug_profile()<cr>", "Generate Debug Profile" },
@@ -122,10 +140,10 @@ local mappings = {
 	},
 	x = {
 		name = "QuickFixList",
-		x = { "<cmd>copen<CR>", "Open Quickfix" },
-		j = { "<cmd>cnext<CR>", "Next in Quickfix" },
-		k = { "<cmd>cprev<CR>", "Prev in Quickfix" },
-		X = { "<cmd>ccl<CR>", "Close Quickfix" },
+		x = { toggle_qflist, "Toggle" },
+		j = { "<cmd>cnext<CR>", "Next" },
+		k = { "<cmd>cprevious<CR>", "Prev" },
+		c = { "<cmd>call setqflist([])<CR>", "Clear" },
 	},
 }
 

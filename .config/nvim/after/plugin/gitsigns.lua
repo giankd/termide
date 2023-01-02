@@ -6,11 +6,41 @@ local xnoremap = Remap.xnoremap
 
 require("gitsigns").setup({
 	signs = {
-		add = { hl = "GitSignsAdd", text = "│", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
-		change = { hl = "GitSignsChange", text = "│", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
-		delete = { hl = "GitSignsDelete", text = "_", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-		topdelete = { hl = "GitSignsDelete", text = "‾", numhl = "GitSignsDeleteNr", linehl = "GitSignsDeleteLn" },
-		changedelete = { hl = "GitSignsChange", text = "~", numhl = "GitSignsChangeNr", linehl = "GitSignsChangeLn" },
+		add = {
+			hl = "GitSignsAdd",
+			text = "│",
+			numhl = "GitSignsAddNr",
+			linehl = "GitSignsAddLn",
+			show_count = true,
+		},
+		change = {
+			hl = "GitSignsChange",
+			text = "│",
+			numhl = "GitSignsChangeNr",
+			linehl = "GitSignsChangeLn",
+			show_count = true,
+		},
+		delete = {
+			hl = "GitSignsDelete",
+			text = "_",
+			numhl = "GitSignsDeleteNr",
+			linehl = "GitSignsDeleteLn",
+			show_count = true,
+		},
+		topdelete = {
+			hl = "GitSignsDelete",
+			text = "‾",
+			numhl = "GitSignsDeleteNr",
+			linehl = "GitSignsDeleteLn",
+			show_count = true,
+		},
+		changedelete = {
+			hl = "GitSignsChange",
+			text = "~",
+			numhl = "GitSignsChangeNr",
+			linehl = "GitSignsChangeLn",
+			show_count = true,
+		},
 	},
 	signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
 	numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
@@ -73,6 +103,18 @@ require("gitsigns").setup({
 		local keymap_g_n = {
 			G = {
 				name = "Git",
+				["a"] = {
+					function()
+						gs.setqflist(0)
+					end,
+					"Current Buffer Changes",
+				},
+				["A"] = {
+					function()
+						gs.setqflist("all")
+					end,
+					"All Changes",
+				},
 				["s"] = { "<cmd>Gitsigns stage_hunk<CR>", "Stage Hunk" },
 				["S"] = { gs.stage_buffer, "Stage Buffer" },
 				["r"] = { "<cmd>Gitsigns reset_hunk<CR>", "Reset Hunk" },
@@ -83,18 +125,22 @@ require("gitsigns").setup({
 					function()
 						gs.blame_line({ full = true })
 					end,
-					"Blame Line",
+					"Blame Line (Signs)",
 				},
 				["B"] = { "<cmd>Git blame<cr>", "Blame mode (Fugitive)" },
-				["tb"] = { gs.toggle_current_line_blame, "Toggle Blame Line" },
+				["l"] = { "<cmd>0GcLog<cr>", "Previous versions of current file" },
 				["d"] = { gs.diffthis, "Diff" },
 				["D"] = {
 					function()
-						gs.diffthis("~")
+						gs.diffthis("~", {
+							vertical = true,
+						})
 					end,
 					"Diff All",
 				},
+				["tb"] = { gs.toggle_current_line_blame, "Toggle Blame Line" },
 				["td"] = { gs.toggle_deleted, "Toggle Deleted" },
+				["tl"] = { gs.toggle_linehl, "Toggle Line HL" },
 			},
 		}
 
@@ -103,6 +149,7 @@ require("gitsigns").setup({
 				name = "Git",
 				["s"] = { "<cmd>Gitsigns stage_hunk<CR>", "Stage Hunk" },
 				["r"] = { "<cmd>Gitsigns reset_hunk<CR>", "Reset Hunk" },
+				["l"] = { "<cmd>GcLog<CR>", "Previous Versions" },
 			},
 		}
 
