@@ -23,6 +23,14 @@ return require("packer").startup(function(use)
 	use("nvim-lua/plenary.nvim")
 	use("nvim-lua/popup.nvim")
 	use("nvim-telescope/telescope.nvim")
+	use({
+		"sudormrfbin/cheatsheet.nvim",
+		requires = {
+			{ "nvim-telescope/telescope.nvim" },
+			{ "nvim-lua/popup.nvim" },
+			{ "nvim-lua/plenary.nvim" },
+		},
+	})
 	use("numToStr/Comment.nvim")
 	use("folke/which-key.nvim")
 	use({ "mhartington/formatter.nvim" })
