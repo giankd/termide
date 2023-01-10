@@ -66,6 +66,12 @@ require("formatter").setup({
 		javascriptreact = {
 			require("formatter.filetypes.javascriptreact").prettier,
 		},
+		html = {
+			require("formatter.filetypes.html").htmlbeautify,
+		},
+		svelte = {
+			require("formatter.filetypes.svelte").prettier,
+		},
 		css = {
 			require("formatter.filetypes.css").prettier,
 		},

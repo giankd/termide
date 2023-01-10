@@ -428,6 +428,11 @@ nvim_lsp.diagnosticls.setup({
 	},
 })
 
+nvim_lsp.svelte.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
 -- icon
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 	underline = true,
