@@ -2,6 +2,13 @@ local telescope = require("telescope")
 local actions = require("telescope.actions")
 
 telescope.setup({
+	pickers = {
+		live_grep = {
+			additional_args = function(opts)
+				return { "--hidden" }
+			end,
+		},
+	},
 	defaults = {
 		file_ignore_patterns = { "node_modules", ".git", ".yarn", "vendor" },
 		file_sorter = require("telescope.sorters").get_fzf_sorter,
