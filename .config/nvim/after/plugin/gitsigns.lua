@@ -132,15 +132,24 @@ require("gitsigns").setup({
 				["d"] = { gs.diffthis, "Diff" },
 				["D"] = {
 					function()
-						gs.diffthis("~", {
+						gs.diffthis("~1", {
 							vertical = true,
 						})
 					end,
-					"Diff All",
+					"Diff Last Commit",
 				},
 				["tb"] = { gs.toggle_current_line_blame, "Toggle Blame Line" },
 				["td"] = { gs.toggle_deleted, "Toggle Deleted" },
 				["tl"] = { gs.toggle_linehl, "Toggle Line HL" },
+				["c"] = {
+					name = "Conflicts",
+					["k"] = { "[c", "Previous hunk" },
+					["j"] = { "]c", "Next hunk" },
+					["c"] = { "dp", "Put" },
+					["h"] = { "<cmd>diffget :2<CR>", "Get from left" },
+					["l"] = { "<cmd>diffget :3<CR>", "Get from right" },
+					["s"] = { "<cmd>Gwrite!<CR>", "Resolve" },
+				},
 			},
 		}
 
