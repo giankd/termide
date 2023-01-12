@@ -4,6 +4,29 @@ local nmap = Remap.nmap
 local vnoremap = Remap.vnoremap
 local xnoremap = Remap.xnoremap
 
+local function diffCurrentLines()
+	local mode = vim.fn.mode()
+	if mode == "V" or mode == "v" then
+		local chm = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+		vim.api.nvim_feedkeys(chm, "n", true)
+		vim.defer_fn(function()
+			local initial_mark = vim.api.nvim_buf_get_mark(0, "<")
+			local final_mark = vim.api.nvim_buf_get_mark(0, ">")
+			local initial_pos = initial_mark[0]
+			local final_pos = final_mark[0]
+			if initial_pos == 0 and final_pos == 0 then
+				print(vim.inspect(initial_mark), vim.inspect(final_mark))
+				vim.notify("Impossible to get selection", vim.log.levels.WARN)
+				return
+			end
+			vim.cmd("'<,'>GcLog")
+		end, 100)
+		return
+	end
+	print(vim.fn.mode())
+	vim.notify("Mode not ready", vim.log.levels.ERROR)
+end
+
 require("gitsigns").setup({
 	signs = {
 		add = {
@@ -128,7 +151,7 @@ require("gitsigns").setup({
 					"Blame Line (Signs)",
 				},
 				["B"] = { "<cmd>Git blame<cr>", "Blame mode (Fugitive)" },
-				["l"] = { "<cmd>0GcLog<cr>", "Previous versions of current file" },
+				["l"] = { "<cmd>0GcLog<cr>", "Previous versions" },
 				["d"] = { gs.diffthis, "Diff" },
 				["D"] = {
 					function()
@@ -158,7 +181,7 @@ require("gitsigns").setup({
 				name = "Git",
 				["s"] = { "<cmd>Gitsigns stage_hunk<CR>", "Stage Hunk" },
 				["r"] = { "<cmd>Gitsigns reset_hunk<CR>", "Reset Hunk" },
-				["l"] = { "<cmd>GcLog<CR>", "Previous Versions" },
+				["l"] = { diffCurrentLines, "Previous Versions" },
 			},
 		}
 
