@@ -143,7 +143,8 @@ require("gitsigns").setup({
 				["r"] = { "<cmd>Gitsigns reset_hunk<CR>", "Reset Hunk" },
 				["R"] = { gs.reset_buffer, "Reset Buffer" },
 				["u"] = { gs.undo_stage_hunk, "Unstage Hunk" },
-				["p"] = { gs.preview_hunk, "Preview Hunk" },
+				["P"] = { gs.preview_hunk, "Preview Hunk" },
+				["p"] = { gs.preview_hunk_inline, "Preview Hunk" },
 				["b"] = {
 					function()
 						gs.blame_line({ full = true })
