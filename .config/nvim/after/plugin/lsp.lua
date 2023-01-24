@@ -1,101 +1,112 @@
 local nvim_lsp = require("lspconfig")
+local trouble = require("trouble")
+local bulb = require("nvim-lightbulb")
 local Remap = require("giankd.keymap")
+local lsphelper = require("giankd.lsp-utils")
 local nnoremap = Remap.nnoremap
-local saga = require("lspsaga")
 
-saga.init_lsp_saga({
-	-- Options with default value
-	-- "single" | "double" | "rounded" | "bold" | "plus"
-	border_style = "rounded",
-	--the range of 0 for fully opaque window (disabled) to 100 for fully
-	--transparent background. Values between 0-30 are typically most useful.
-	saga_winblend = 0,
-	-- when cursor in saga window you config these to move
-	move_in_saga = { prev = "<C-p>", next = "<C-n>" },
-	-- Error, Warn, Info, Hint
-	-- and diagnostic_header can be a function type
-	-- must return a string and when diagnostic_header
-	-- is function type it will have a param `entry`
-	-- entry is a table type has these filed
-	-- { bufnr, code, col, end_col, end_lnum, lnum, message, severity, source }
-	diagnostic_header = { "✘ ", "❯ ", "✦ ", "◈ " },
-	-- preview lines of lsp_finder and definition preview
-	max_preview_lines = 10,
-	code_action_icon = "ϟ ",
-	-- if true can press number to execute the codeaction in codeaction window
-	code_action_num_shortcut = true,
-	code_action_lightbulb = {
-		enable = true,
-		enable_in_insert = true,
-		cache_code_action = true,
-		sign = true,
-		update_time = 150,
-		sign_priority = 20,
-		virtual_text = true,
+-- UI Config
+-- Diagnostics
+trouble.setup({
+	position = "bottom", -- position of the list can be: bottom, top, left, right
+	height = 10, -- height of the trouble list when position is top or bottom
+	width = 50, -- width of the list when position is left or right
+	icons = true, -- use devicons for filenames
+	mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+	fold_open = "", -- icon used for open folds
+	fold_closed = "", -- icon used for closed folds
+	group = true, -- group results by file
+	padding = true, -- add an extra new line on top of the list
+	action_keys = { -- key mappings for actions in the trouble list
+		-- map to {} to remove a mapping, for example:
+		-- close = {},
+		close = "q", -- close the list
+		cancel = { "<esc>", "<c-c>" }, -- cancel the preview and get back to your last window / buffer / cursor
+		refresh = "r", -- manually refresh
+		jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
+		open_split = { "<c-x>" }, -- open buffer in new split
+		open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
+		open_tab = { "<c-t>" }, -- open buffer in new tab
+		jump_close = { "o" }, -- jump to the diagnostic and close the list
+		toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
+		toggle_preview = "P", -- toggle auto_preview
+		hover = "K", -- opens a small popup with the full multiline message
+		preview = "p", -- preview the diagnostic location
+		close_folds = { "zM", "zm" }, -- close all folds
+		open_folds = { "zR", "zr" }, -- open all folds
+		toggle_fold = { "zA", "za" }, -- toggle fold of current file
+		previous = "k", -- previous item
+		next = "j", -- next item
 	},
-	-- finder icons
-	finder_icons = {
-		def = "  ",
-		ref = " ",
-		link = "  ",
+	indent_lines = true, -- add an indent guide below the fold icons
+	auto_open = false, -- automatically open the list when you have diagnostics
+	auto_close = true, -- automatically close the list when you have no diagnostics
+	auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+	auto_fold = false, -- automatically fold a file trouble list at creation
+	auto_jump = {}, -- for the given modes, automatically jump if there is only a single result
+	signs = {
+		-- icons / text used for a diagnostic
+		error = "",
+		warning = "",
+		hint = "",
+		information = "",
+		other = "➜",
 	},
-	-- finder do lsp request timeout
-	-- if your project big enough or your server very slow
-	-- you may need to increase this value
-	finder_request_timeout = 1500,
-	finder_action_keys = {
-		open = "o",
-		vsplit = "s",
-		split = "i",
-		tabe = "t",
-		quit = "q",
-		scroll_down = "<C-j>",
-		scroll_up = "<C-k>", -- quit can be a table
-	},
-	code_action_keys = {
-		quit = "q",
-		exec = "<CR>",
-	},
-	definition_action_keys = {
-		edit = "<C-c>o",
-		vsplit = "<C-c>v",
-		split = "<C-c>i",
-		tabe = "<C-c>t",
-		quit = "q",
-	},
-	rename_action_quit = "<ESC>",
-	rename_in_select = true,
-	-- show symbols in winbar must nightly
-	symbol_in_winbar = {
-		in_custom = false,
-		enable = false,
-		separator = " ",
-		show_file = true,
-		click_support = false,
-	},
-	-- show outline
-	show_outline = {
-		win_position = "right",
-		--set special filetype win that outline window split.like NvimTree neotree
-		-- defx, db_ui
-		win_with = "",
-		win_width = 30,
-		auto_enter = true,
-		auto_preview = true,
-		virt_text = "┃",
-		jump_key = "o",
-		-- auto refresh when change buffer
-		auto_refresh = true,
-	},
-	-- custom lsp kind
-	-- usage { Field = 'color code'} or {Field = {your icon, your color code}}
-	custom_kind = {},
-	-- if you don't use nvim-lspconfig you must pass your server name and
-	-- the related filetypes into this table
-	-- like server_filetype_map = { metals = { "sbt", "scala" } }
-	server_filetype_map = {},
+	use_diagnostic_signs = false, -- enabling this will use the signs defined in your lsp client
 })
-
+-- Code Actions
+bulb.setup({
+	-- LSP client names to ignore
+	-- Example: {"sumneko_lua", "null-ls"}
+	ignore = {},
+	sign = {
+		enabled = false,
+		-- Priority of the gutter sign
+		priority = 10,
+	},
+	float = {
+		enabled = true,
+		-- Text to show in the popup float
+		text = "",
+		-- Available keys for window options:
+		-- - height     of floating window
+		-- - width      of floating window
+		-- - wrap_at    character to wrap at for computing height
+		-- - max_width  maximal width of floating window
+		-- - max_height maximal height of floating window
+		-- - pad_left   number of columns to pad contents at left
+		-- - pad_right  number of columns to pad contents at right
+		-- - pad_top    number of lines to pad contents at top
+		-- - pad_bottom number of lines to pad contents at bottom
+		-- - offset_x   x-axis offset of the floating window
+		-- - offset_y   y-axis offset of the floating window
+		-- - anchor     corner of float to place at the cursor (NW, NE, SW, SE)
+		-- - winblend   transparency of the window (0-100)
+		win_opts = {},
+	},
+	virtual_text = {
+		enabled = true,
+		-- Text to show at virtual text
+		text = "",
+		-- highlight mode to use for virtual text (replace, combine, blend), see :help nvim_buf_set_extmark() for reference
+		hl_mode = "blend",
+	},
+	status_text = {
+		enabled = true,
+		-- Text to provide when code actions are available
+		text = "",
+		-- Text to provide when no actions are available
+		text_unavailable = "",
+	},
+	autocmd = {
+		enabled = true,
+		-- see :help autocmd-pattern
+		pattern = { "*" },
+		-- see :help autocmd-events
+		events = { "CursorHold", "CursorHoldI" },
+	},
+})
+-- Icons
 local protocol = require("vim.lsp.protocol")
 local protocolCompletionIcons = {
 	"", -- Text
@@ -124,6 +135,8 @@ local protocolCompletionIcons = {
 	"ﬦ", -- Operator
 	"", -- TypeParameter
 }
+
+-- Installer
 require("mason").setup({
 	ui = {
 		icons = {
@@ -138,6 +151,7 @@ require("mason-lspconfig").setup({
 	automatic_installation = true,
 })
 
+-- On LSP Server Attach
 local on_attach = function(client, bufnr)
 	print("Attaching " .. client.name)
 
@@ -149,42 +163,34 @@ local on_attach = function(client, bufnr)
 		else
 			f.EnableFormatOnSave()
 		end
-	else
-		print("Client " .. client.name .. " has no document_formatting or documentFormattingProvider")
+		-- else
+		-- 	print("Client " .. client.name .. " has no document_formatting or documentFormattingProvider")
 	end
 
 	-- Keymaps
-	nnoremap("K", "<cmd>Lspsaga hover_doc<CR>")
-	nnoremap("]d", function()
-		require("lspsaga.diagnostic").goto_prev()
-	end)
-	nnoremap("[d", function()
-		require("lspsaga.diagnostic").goto_next()
-	end)
-	nnoremap("[e", function()
-		require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })
-	end)
-	nnoremap("]e", function()
-		require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })
-	end)
+	nnoremap("K", lsphelper.hover)
+	nnoremap("[d", lsphelper.goto_prev_d)
+	nnoremap("]d", lsphelper.goto_next_d)
+	nnoremap("[e", lsphelper.goto_prev_e)
+	nnoremap("]e", lsphelper.goto_next_e)
 
 	local whichkey = require("which-key")
 	local keymap_c = {
 		c = {
 			name = "Code",
-			a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
-			d = { "<cmd>Telescope diagnostics<CR>", "Diagnostics" },
-			f = { "<cmd>Lspsaga lsp_finder<CR>", "Finder" },
-			s = { "<cmd>Lspsaga signature_help<CR>", "Signature Help" },
-			n = { "<cmd>Lspsaga rename<CR>", "Rename" },
-			p = { "<cmd>Lspsaga peek_definition<CR>", "Definition" },
-			o = { "<cmd>Lspsaga outline<CR>", "Lspsaga Outline" },
-			O = { "<cmd>SymbolsOutline<CR>", "Symbols Outline" },
-			l = { "<cmd>Lspsaga show_line_diagnostics<CR>", "Line Diagnostic" },
-			c = { "<cmd>Lspsaga show_cursor_diagnostics<CR>", "Cursor Diagnostic" },
-			r = { "<cmd>Telescope lsp_references<CR>", "References" },
+			a = { lsphelper.code_actions, "Code Action" },
+			d = { lsphelper.buf_diagnostics, "Document Diagnostics" },
+			D = { lsphelper.workspace_diagnostics, "Workspace Diagnostics" },
+			f = { lsphelper.finder, "Finder" },
+			s = { lsphelper.signature_help, "Signature Help" },
+			n = { lsphelper.rename, "Rename" },
+			p = { lsphelper.peek_definition, "Definition" },
+			o = { lsphelper.outline, "Outline" },
+			l = { lsphelper.line_diagnostics, "Line Diagnostic" },
+			c = { lsphelper.cursor_diagnostics, "Cursor Diagnostic" },
+			r = { lsphelper.references, "References" },
 			i = {
-				'<cmd>lua vim.lsp.buf.execute_command({command = "_typescript.organizeImports", arguments = {vim.fn.expand("%:p")}})<CR>',
+				lsphelper.organize_imports,
 				"Organize Imports",
 			},
 		},
@@ -199,18 +205,17 @@ local on_attach = function(client, bufnr)
 	local keymap_c_visual = {
 		c = {
 			name = "Code",
-			a = { "<cmd>Lspsaga range_code_action<CR>", "Code Action" },
+			a = { lsphelper.code_actions, "Code Action" },
 		},
 	}
 
 	local keymap_g = {
 		g = {
 			name = "Goto",
-			d = { "<Cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-			D = { "<Cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
-			s = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
-			i = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Goto Implementation" },
-			t = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "Goto Type Definition" },
+			d = { lsphelper.goto_definition, "Definition" },
+			D = { lsphelper.goto_declaration, "Declaration" },
+			i = { lsphelper.goto_implementation, "Goto Implementation" },
+			t = { lsphelper.goto_type_def, "Goto Type Definition" },
 		},
 	}
 	whichkey.register(keymap_c, { buffer = bufnr, prefix = "<leader>" })
@@ -221,6 +226,7 @@ local on_attach = function(client, bufnr)
 	protocol.CompletionItemKind = protocolCompletionIcons
 end
 
+-- List of LSP Servers and configs for each
 -- Set up completion using nvim_cmp with LSP source
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -439,6 +445,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 	-- This sets the spacing and the prefix, obviously.
 	virtual_text = {
 		spacing = 4,
-		prefix = "",
+		prefix = "✘",
 	},
 })

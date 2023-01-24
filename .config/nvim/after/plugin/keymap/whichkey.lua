@@ -71,7 +71,7 @@ local mappings = {
 			d = { telescope.git_bcommits, "Diff Commits" },
 		},
 		f = { telescope.live_grep, "Live Grep" },
-		c = { "<cmd>Cheatsheet<CR>", "Commands" },
+		c = { "<cmd>Cheatsheet<CR>", "Cheat" },
 		w = { telescope.current_buffer_fuzzy_find, "Current Buffer" },
 	},
 

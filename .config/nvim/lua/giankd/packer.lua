@@ -24,6 +24,13 @@ return require("packer").startup(function(use)
 	use("nvim-lua/popup.nvim")
 	use("nvim-telescope/telescope.nvim")
 	use({
+		"hood/popui.nvim",
+		config = function()
+			vim.ui.select = require("popui.ui-overrider")
+			vim.ui.input = require("popui.input-overrider")
+		end,
+	}) -- Better UI Inputs and Selects
+	use({
 		"sudormrfbin/cheatsheet.nvim",
 		requires = {
 			{ "nvim-telescope/telescope.nvim" },
@@ -38,19 +45,28 @@ return require("packer").startup(function(use)
 	use("windwp/nvim-ts-autotag")
 
 	-- LSP Plugs
-	use("neovim/nvim-lspconfig")
-	use({ "williamboman/mason.nvim" })
-	use({ "williamboman/mason-lspconfig.nvim" })
-	use("folke/lsp-colors.nvim")
+	use("neovim/nvim-lspconfig") -- LSP Configuration manager
+	use({ "williamboman/mason.nvim" }) -- LSP Installer
+	use({ "williamboman/mason-lspconfig.nvim" }) -- LSP Installer with Configurer
 	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-nvim-lsp")
 	use("hrsh7th/cmp-buffer")
 	use("hrsh7th/cmp-path")
-	use("onsails/lspkind-nvim")
-	use("nvim-lua/lsp_extensions.nvim")
-	use("glepnir/lspsaga.nvim")
+	use("hrsh7th/cmp-cmdline")
+	use(" hrsh7th/cmp-nvim-lsp-signature-help ")
 	use("L3MON4D3/LuaSnip")
 	use("saadparwaiz1/cmp_luasnip")
+	use("j-hui/fidget.nvim") -- LSP Progress UI
+	use("folke/lsp-colors.nvim") -- LSP Highlight groups
+	use("onsails/lspkind-nvim") -- LSP Icons
+	use({
+		"folke/trouble.nvim",
+		requires = "kyazdani42/nvim-web-devicons",
+	}) -- UI Wrapper for LSP Diagnostics
+	use({
+		"kosayoda/nvim-lightbulb",
+		requires = "antoinemadec/FixCursorHold.nvim",
+	}) -- UI Wrapper for LSP Code Actions
 	use("simrat39/symbols-outline.nvim")
 
 	-- Treesitter
