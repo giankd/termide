@@ -75,10 +75,12 @@ local mappings = {
 		w = { telescope.current_buffer_fuzzy_find, "Current Buffer" },
 	},
 
-	A = {
+	a = {
 		name = "Fold",
 		c = { "zf%", "Fold matching character" },
-		b = { "zfi{", "Fold bracket block" },
+		b = { "f{zfi{", "Fold bracket block" },
+		p = { "f(zfi(", "Fold parenthesis block" },
+		s = { "f[zfi[", "Fold square bracket block" },
 	},
 
 	b = {
