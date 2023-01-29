@@ -114,6 +114,18 @@ lsp.ensure_installed({
 	"svelte",
 })
 
+-- Global Utils keymaps
+local whichkey = require("which-key")
+local utils_keymap = {
+	L = {
+		name = "LSP",
+		i = { "<cmd>LspInfo<CR>", "Lsp Info" },
+		r = { "<cmd>LspRestart<CR>", "Lsp Restart" },
+		m = { "<cmd>Mason<CR>", "Mason UI" },
+	},
+}
+whichkey.register(utils_keymap, { buffer = nil, prefix = "<leader>" })
+
 -- On LSP Server Attach
 local on_attach = function(client, bufnr)
 	utils.notify("Attaching " .. client.name, { type = "info", title = "LSP" })
@@ -137,7 +149,6 @@ local on_attach = function(client, bufnr)
 	nnoremap("[e", lsphelper.goto_prev_e)
 	nnoremap("]e", lsphelper.goto_next_e)
 
-	local whichkey = require("which-key")
 	local keymap_c = {
 		c = {
 			name = "Code",
@@ -156,12 +167,6 @@ local on_attach = function(client, bufnr)
 				lsphelper.organize_imports,
 				"Organize Imports",
 			},
-		},
-		L = {
-			name = "LSP",
-			i = { "<cmd>LspInfo<CR>", "Lsp Info" },
-			r = { "<cmd>LspRestart<CR>", "Lsp Restart" },
-			m = { "<cmd>Mason<CR>", "Mason UI" },
 		},
 	}
 
