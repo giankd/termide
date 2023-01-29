@@ -1,139 +1,87 @@
-local nvim_lsp = require("lspconfig")
-local trouble = require("trouble")
-local bulb = require("nvim-lightbulb")
+local utils = require("giankd.notify")
+local ok, lsp = pcall(require, "lsp-zero")
+
+if not ok then
+	utils.notify("Unable to require lsp-zero", { type = "error" })
+	return
+end
+
 local Remap = require("giankd.keymap")
 local lsphelper = require("giankd.lsp-utils")
 local nnoremap = Remap.nnoremap
 
--- UI Config
--- Diagnostics
-trouble.setup({
-	position = "bottom", -- position of the list can be: bottom, top, left, right
-	height = 10, -- height of the trouble list when position is top or bottom
-	width = 50, -- width of the list when position is left or right
-	icons = true, -- use devicons for filenames
-	mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
-	fold_open = "", -- icon used for open folds
-	fold_closed = "", -- icon used for closed folds
-	group = true, -- group results by file
-	padding = true, -- add an extra new line on top of the list
-	action_keys = { -- key mappings for actions in the trouble list
-		-- map to {} to remove a mapping, for example:
-		-- close = {},
-		close = "q", -- close the list
-		cancel = { "<esc>", "<c-c>" }, -- cancel the preview and get back to your last window / buffer / cursor
-		refresh = "r", -- manually refresh
-		jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
-		open_split = { "<c-x>" }, -- open buffer in new split
-		open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
-		open_tab = { "<c-t>" }, -- open buffer in new tab
-		jump_close = { "o" }, -- jump to the diagnostic and close the list
-		toggle_mode = "m", -- toggle between "workspace" and "document" diagnostics mode
-		toggle_preview = "P", -- toggle auto_preview
-		hover = "K", -- opens a small popup with the full multiline message
-		preview = "p", -- preview the diagnostic location
-		close_folds = { "zM", "zm" }, -- close all folds
-		open_folds = { "zR", "zr" }, -- open all folds
-		toggle_fold = { "zA", "za" }, -- toggle fold of current file
-		previous = "k", -- previous item
-		next = "j", -- next item
-	},
-	indent_lines = true, -- add an indent guide below the fold icons
-	auto_open = false, -- automatically open the list when you have diagnostics
-	auto_close = true, -- automatically close the list when you have no diagnostics
-	auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-	auto_fold = false, -- automatically fold a file trouble list at creation
-	auto_jump = {}, -- for the given modes, automatically jump if there is only a single result
-	signs = {
-		-- icons / text used for a diagnostic
-		error = "",
-		warning = "",
-		hint = "",
-		information = "",
-		other = "➜",
-	},
-	use_diagnostic_signs = false, -- enabling this will use the signs defined in your lsp client
-})
--- Code Actions
-bulb.setup({
-	-- LSP client names to ignore
-	-- Example: {"sumneko_lua", "null-ls"}
-	ignore = {},
-	sign = {
-		enabled = false,
-		-- Priority of the gutter sign
-		priority = 10,
-	},
-	float = {
-		enabled = true,
-		-- Text to show in the popup float
-		text = "",
-		-- Available keys for window options:
-		-- - height     of floating window
-		-- - width      of floating window
-		-- - wrap_at    character to wrap at for computing height
-		-- - max_width  maximal width of floating window
-		-- - max_height maximal height of floating window
-		-- - pad_left   number of columns to pad contents at left
-		-- - pad_right  number of columns to pad contents at right
-		-- - pad_top    number of lines to pad contents at top
-		-- - pad_bottom number of lines to pad contents at bottom
-		-- - offset_x   x-axis offset of the floating window
-		-- - offset_y   y-axis offset of the floating window
-		-- - anchor     corner of float to place at the cursor (NW, NE, SW, SE)
-		-- - winblend   transparency of the window (0-100)
-		win_opts = {},
-	},
-	virtual_text = {
-		enabled = true,
-		-- Text to show at virtual text
-		text = "",
-		-- highlight mode to use for virtual text (replace, combine, blend), see :help nvim_buf_set_extmark() for reference
-		hl_mode = "blend",
-	},
-	status_text = {
-		enabled = true,
-		-- Text to provide when code actions are available
-		text = "",
-		-- Text to provide when no actions are available
-		text_unavailable = "",
-	},
-	autocmd = {
-		enabled = true,
-		-- see :help autocmd-pattern
-		pattern = { "*" },
-		-- see :help autocmd-events
-		events = { "CursorHold", "CursorHoldI" },
-	},
-})
--- Icons
-local protocol = require("vim.lsp.protocol")
-local protocolCompletionIcons = {
-	"", -- Text
-	"", -- Method
-	"", -- Function
-	"", -- Constructor
-	"", -- Field
-	"", -- Variable
-	"", -- Class
-	"ﰮ", -- Interface
-	"", -- Module
-	"", -- Property
-	"", -- Unit
-	"", -- Value
-	"", -- Enum
-	"", -- Keyword
-	"﬌", -- Snippet
-	"", -- Color
-	"", -- File
-	"", -- Reference
-	"", -- Folder
-	"", -- EnumMember
-	"", -- Constant
-	"", -- Struct
-	"", -- Event
-	"ﬦ", -- Operator
-	"", -- TypeParameter
+local kind = {
+	Text = "",
+	Method = "",
+	Function = "",
+	Constructor = "",
+	Field = "ﰠ",
+	Variable = "",
+	Class = "ﴯ",
+	Interface = "",
+	Module = "",
+	Property = "",
+	Unit = "",
+	Value = "",
+	Enum = "",
+	Keyword = "",
+	Snippet = "﬌",
+	Color = "",
+	File = "",
+	Reference = "",
+	Folder = "",
+	EnumMember = "",
+	Constant = "",
+	Struct = "פּ",
+	Event = "",
+	Operator = "ﬦ",
+	TypeParameter = "",
+}
+local lsp_kind = {
+	File = " ",
+	Module = " ",
+	Namespace = " ",
+	Package = " ",
+	Class = " ",
+	Method = " ",
+	Property = " ",
+	Field = " ",
+	Constructor = " ",
+	Enum = "了",
+	Interface = " ",
+	Function = " ",
+	Variable = " ",
+	Constant = " ",
+	String = " ",
+	Number = " ",
+	Boolean = " ",
+	Array = " ",
+	Object = " ",
+	Key = " ",
+	Null = " ",
+	EnumMember = " ",
+	Struct = " ",
+	Event = " ",
+	Operator = " ",
+	TypeParameter = " ",
+	-- ccls
+	TypeAlias = " ",
+	Parameter = " ",
+	StaticMethod = "ﴂ ",
+	Macro = " ",
+	-- for completion sb microsoft!!!
+	Text = " ",
+	Snippet = " ",
+	Folder = " ",
+	Unit = " ",
+	Value = " ",
+}
+local menu_icons = {
+	nvim_lsp = "λ",
+	luasnip = "",
+	buffer = "",
+	path = "",
+	nvim_lua = "",
 }
 
 -- Installer
@@ -151,20 +99,35 @@ require("mason-lspconfig").setup({
 	automatic_installation = true,
 })
 
+lsp.preset("lsp-compe")
+lsp.ensure_installed({
+	"rust_analyzer",
+	"tsserver",
+	"eslint",
+	"cssls",
+	"stylelint_lsp",
+	"tailwindcss",
+	"sumneko_lua",
+	"vimls",
+	"gopls",
+	"bashls",
+	"svelte",
+})
+
 -- On LSP Server Attach
 local on_attach = function(client, bufnr)
-	print("Attaching " .. client.name)
+	utils.notify("Attaching " .. client.name, { type = "info", title = "LSP" })
 
 	local serverCapabilities = client.server_capabilities
-	if serverCapabilities.document_formatting or serverCapabilities.documentFormattingProvider then
-		local status, f = pcall(require, "giankd.formatter")
-		if not status then
-			print("Unable to require formatter module")
-		else
-			f.EnableFormatOnSave()
+	local status, f = pcall(require, "giankd.formatter")
+	if not status then
+		utils.notify("Unable to require formatter module", { type = "error", title = "System" })
+	else
+		if serverCapabilities.document_formatting or serverCapabilities.documentFormattingProvider then
+			f.EnableNativeFormatter()
+			utils.notify("LSP formatter found: " .. client.name, { type = "info", title = "LSP" })
 		end
-		-- else
-		-- 	print("Client " .. client.name .. " has no document_formatting or documentFormattingProvider")
+		f.EnableFormatOnSave()
 	end
 
 	-- Keymaps
@@ -221,55 +184,21 @@ local on_attach = function(client, bufnr)
 	whichkey.register(keymap_c, { buffer = bufnr, prefix = "<leader>" })
 	whichkey.register(keymap_c_visual, { mode = "v", buffer = bufnr, prefix = "<leader>" })
 	whichkey.register(keymap_g, { buffer = bufnr, prefix = "<leader>" })
-
-	-- Enable icons
-	protocol.CompletionItemKind = protocolCompletionIcons
 end
 
--- List of LSP Servers and configs for each
--- Set up completion using nvim_cmp with LSP source
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-local lsp_defaults = {
-	flags = {
-		debounce_text_changes = 150,
-	},
-	capabilities = capabilities,
-	on_attach = on_attach,
-}
-nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.default_config, lsp_defaults)
-
-nvim_lsp.tsserver.setup({
-	on_attach = on_attach,
-	filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-	capabilities = capabilities,
-})
-local cssls_cap = capabilities
-cssls_cap.textDocument.completion.completionItem.snippetSupport = true
--- TODO Commented due some nesting problems, solved by vscode
--- https://github.com/microsoft/vscode/issues/147674
-nvim_lsp.cssls.setup({
-	cmd = { "vscode-css-language-server", "--stdio" },
-	filetypes = { "css", "sass", "scss" },
-	on_attach = on_attach,
-	capabilities = cssls_cap,
-	settings = {
-		css = {
-			-- DISABLE WITH
-			-- validate = false,
-		},
+lsp.set_preferences({
+	suggest_lsp_servers = true,
+	set_lsp_keymaps = false, -- set to false if you want to configure your own keybindings
+	manage_nvim_cmp = false, -- set to false if you want to configure nvim-cmp on your own
+	sign_icons = {
+		error = "",
+		warn = "",
+		hint = "",
+		info = "➜",
 	},
 })
 
-nvim_lsp.tailwindcss.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
-
-nvim_lsp.stylelint_lsp.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	filetypes = { "css", "sass", "scss" },
+lsp.configure("stylelint_lsp", {
 	settings = {
 		stylelintplus = {
 			-- see available options in stylelint-lsp documentation
@@ -279,63 +208,20 @@ nvim_lsp.stylelint_lsp.setup({
 	},
 })
 
-nvim_lsp.vimls.setup({
-	on_attach = on_attach,
-	filetypes = { "vim" },
-	capabilities = capabilities,
-	init_options = {
-		diagnostic = {
-			enable = true,
-		},
-		indexes = {
-			count = 3,
-			gap = 100,
-			projectRootPatterns = { "runtime", "nvim", ".git", "autoload", "plugin" },
-			runtimepath = true,
-		},
-		iskeyword = "@,48-57,_,192-255,-#",
-		runtimepath = "",
-		suggest = {
-			fromRuntimepath = true,
-			fromVimruntime = true,
-		},
-		vimruntime = "",
-	},
-})
-
-nvim_lsp.sumneko_lua.setup({
-	on_attach = on_attach,
-	filetypes = { "lua" },
-	capabilities = capabilities,
+lsp.configure("html", {
 	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = "LuaJIT",
+		init_options = {
+			configurationSection = { "html", "css", "javascript" },
+			embeddedLanguages = {
+				css = true,
+				javascript = true,
 			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { "vim" },
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = vim.api.nvim_get_runtime_file("", true),
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
-			},
+			provideFormatter = false,
 		},
 	},
 })
 
-nvim_lsp.bashls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
-
-nvim_lsp.gopls.setup({
-	on_attach = on_attach,
+lsp.configure("gopls", {
 	settings = {
 		gopls = {
 			experimentalPostfixCompletions = true,
@@ -346,98 +232,23 @@ nvim_lsp.gopls.setup({
 			staticcheck = true,
 		},
 	},
-	capabilities = capabilities,
 })
 
-nvim_lsp.diagnosticls.setup({
-	on_attach = on_attach,
-	filetypes = {
-		"javascript",
-		"javascriptreact",
-		"json",
-		"typescript",
-		"typescriptreact",
-		"css",
-		"less",
-		"scss",
-		"pandoc",
-	},
-	init_options = {
-		linters = {
-			eslint = {
-				command = "eslint_d",
-				rootPatterns = { ".git" },
-				debounce = 100,
-				args = { "--stdin", "--stdin-filename", "%filepath", "--format", "json" },
-				sourceName = "eslint_d",
-				parseJson = {
-					errorsRoot = "[0].messages",
-					line = "line",
-					column = "column",
-					endLine = "endLine",
-					endColumn = "endColumn",
-					message = "[eslint] ${message} [${ruleId}]",
-					security = "severity",
-				},
-				securities = {
-					[2] = "error",
-					[1] = "warning",
-				},
-				-- requiredFiles = { 'prettier.config.js', '.prettierrc', },
+lsp.configure("sumneko_lua", {
+	settings = {
+		Lua = {
+			completion = {
+				callSnippet = "Replace",
 			},
 		},
-		filetypes = {
-			javascript = "eslint",
-			javascriptreact = "eslint",
-			typescript = "eslint",
-			typescriptreact = "eslint",
-		},
-		-- formatters = {
-		--   eslint_d = {
-		--     command = 'eslint_d',
-		--     rootPatterns = { '.git' },
-		--     args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
-		--     requiredFiles = { 'prettier.config.js', '.prettierrc' },
-		--   },
-		--   prettier = {
-		--     -- TODO
-		--     -- command = 'prettier_d_slim',
-		--     command = 'prettier',
-		--     rootPatterns = {
-		--       'package.json',
-		--       '.prettierrc',
-		--       '.prettierrc.json',
-		--       '.prettierrc.toml',
-		--       '.prettierrc.json',
-		--       '.prettierrc.yml',
-		--       '.prettierrc.yaml',
-		--       '.prettierrc.json5',
-		--       '.prettierrc.js',
-		--       '.prettierrc.cjs',
-		--       'prettier.config.js',
-		--       'prettier.config.cjs',
-		--     },
-		--     requiredFiles = { 'package.json', 'prettier.config.js', '.prettierrc' },
-		--     args = { '--stdin', '--stdin-filepath', '%filename' }
-		--   }
-		-- },
-		-- formatFiletypes = {
-		--   css = 'prettier',
-		--   javascript = 'prettier',
-		--   javascriptreact = 'prettier',
-		--   scss = 'prettier',
-		--   less = 'prettier',
-		--   typescript = 'prettier',
-		--   typescriptreact = 'prettier',
-		--   json = 'prettier',
-		-- }
 	},
 })
 
-nvim_lsp.svelte.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
+-- Setup neovim lua configuration
+local has_neodev, neodev = pcall(require, "neodev")
+if has_neodev then
+	neodev.setup()
+end
 
 -- icon
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -447,4 +258,146 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 		spacing = 4,
 		prefix = "✘",
 	},
+	update_in_insert = true,
 })
+
+lsp.on_attach(on_attach)
+lsp.setup()
+
+-- CMP
+local has_cmp, cmp = pcall(require, "cmp")
+if has_cmp then
+	local cmp_select = { behavior = cmp.SelectBehavior.Select }
+	local cmp_sources = {
+		{ name = "nvim_lsp" },
+		{ name = "luasnip" },
+		{ name = "buffer" },
+		{ name = "path" },
+		{ name = "nvim_lsp_signature_help" },
+	}
+	local cmp_mappings = lsp.defaults.cmp_mappings({
+		["<C-d>"] = cmp.mapping.scroll_docs(1),
+		["<C-u>"] = cmp.mapping.scroll_docs(-1),
+		["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
+		["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
+		["<S-Tab>"] = cmp.mapping.select_prev_item(cmp_select),
+		["<Tab>"] = cmp.mapping.select_next_item(cmp_select),
+		["<C-x>"] = cmp.mapping.complete({
+			config = {
+				sources = cmp_sources,
+			},
+		}),
+		["<C-e>"] = cmp.mapping.abort(),
+		["<CR>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = true,
+		}),
+	})
+
+	local cmp_config = lsp.defaults.cmp_config({
+		mapping = cmp_mappings,
+		sources = cmp_sources,
+		window = {
+			completion = cmp.config.window.bordered(),
+			documentation = cmp.config.window.bordered(),
+		},
+		formatting = {
+			fields = { "menu", "abbr", "kind" },
+			format = function(entry, item)
+				item.menu = (menu_icons[entry.source.name] or "")
+					.. " ("
+					.. (entry.source.name or "Unknown source")
+					.. ")"
+				item.kind = kind[item.kind]
+				return item
+			end,
+		},
+	})
+
+	vim.opt.completeopt = { "menu", "menuone", "noselect" }
+	cmp.setup(cmp_config)
+	-- `/` cmdline setup.
+	cmp.setup.cmdline("/", {
+		mapping = cmp.mapping.preset.cmdline(),
+		sources = {
+			{ name = "buffer" },
+		},
+	})
+	-- `:` cmdline setup.
+	cmp.setup.cmdline(":", {
+		mapping = cmp.mapping.preset.cmdline(),
+		sources = cmp.config.sources({
+			{ name = "path" },
+		}, {
+			{
+				name = "cmdline",
+				option = {
+					ignore_cmds = { "Man", "!" },
+				},
+			},
+		}),
+	})
+end
+
+-- UI
+local has_lspsaga, lspsaga = pcall(require, "lspsaga")
+if has_lspsaga then
+	for k, v in pairs(kind) do
+		if lsp_kind[k] then
+			lsp_kind[k] = v
+		end
+	end
+	lspsaga.setup({
+		preview = {
+			lines_above = 0,
+			lines_below = 10,
+		},
+		scroll_preview = {
+			scroll_down = "<C-d>",
+			scroll_up = "<C-u>",
+		},
+		request_timeout = 2000,
+		symbol_in_winbar = {
+			enable = false,
+			separator = " ",
+			hide_keyword = true,
+			show_file = true,
+			folder_level = 2,
+			respect_root = false,
+			color_mode = true,
+		},
+		ui = {
+			-- Currently, only the round theme exists
+			theme = "round",
+			-- This option only works in Neovim 0.9
+			title = true,
+			-- Border type can be single, double, rounded, solid, shadow.
+			border = "double",
+			winblend = 0,
+			expand = "",
+			collapse = "",
+			preview = " ",
+			code_action = "✎",
+			diagnostic = "",
+			incoming = " ",
+			outgoing = " ",
+			colors = {
+				-- Normal background color for floating window
+				normal_bg = "#1d1536",
+				-- Title background color
+				title_bg = "#afd700",
+				red = "#e95678",
+				magenta = "#b33076",
+				orange = "#FF8700",
+				yellow = "#f7bb3b",
+				green = "#afd700",
+				cyan = "#36d0e0",
+				blue = "#61afef",
+				purple = "#CBA6F7",
+				white = "#d1d4cf",
+				black = "#1c1c19",
+			},
+			kind = lsp_kind,
+		},
+	})
+end

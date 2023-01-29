@@ -5,13 +5,13 @@ session_name=$(basename "$session" | tr . _)
 
 tmux start
 if ! tmux has-session -t "$session_name" 2>/dev/null; then
-	tmux new-session -s "$session_name" -c "$session" -n "editor" -d nvim .
-	tmux new-window -t "$session_name" -n "terminal" -c "$session" -d
-	tmux new-window -t "$session_name" -n "misc" -c "$session" -d
+    tmux new-session -s "$session_name" -c "$session" -n "editor" -d nvim .
+    tmux new-window -t "$session_name" -n "terminal" -c "$session" -d
+    tmux new-window -t "$session_name" -n "misc" -c "$session" -d
 fi
 
 if tmux switch-client -t "$session_name"; then
-	tmux switch-client -t "$session_name"
+    tmux switch-client -t "$session_name"
 else
-	tmux attach
+    tmux attach
 fi

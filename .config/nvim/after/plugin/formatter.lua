@@ -67,7 +67,7 @@ require("formatter").setup({
 			require("formatter.filetypes.javascriptreact").prettier,
 		},
 		html = {
-			require("formatter.filetypes.html").htmlbeautify,
+			require("formatter.filetypes.html").prettier,
 		},
 		svelte = {
 			require("formatter.filetypes.svelte").prettier,
@@ -117,7 +117,8 @@ local nmappings = {
 		name = "Format",
 		f = { "<Cmd>lua require('giankd.formatter').Format()<CR>", "Format File" },
 		t = { "<Cmd>lua require('giankd.formatter').ToggleFormatOnSave()<CR>", "Toggle Format on Save" },
-		s = { "<Cmd>lua require('giankd.formatter').GetFormatOnSaveStatus()<CR>", "Format on Save Status" },
+		i = { "<Cmd>lua require('giankd.formatter').GetFormatInfo()<CR>", "Format on Save Status" },
+		s = { "<Cmd>lua require('giankd.formatter').SwitchFormatterType()<CR>", "Switch Formatter type" },
 	},
 }
 -- Formatter does not support selection format

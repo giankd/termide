@@ -1,5 +1,7 @@
 local telescope = require("telescope")
 local actions = require("telescope.actions")
+local builtins = require("telescope.builtin")
+local notifier = require("giankd.notify")
 
 telescope.setup({
 	pickers = {
@@ -10,6 +12,7 @@ telescope.setup({
 		},
 	},
 	defaults = {
+		path_display = "smart",
 		file_ignore_patterns = { "node_modules", ".git", ".yarn", "vendor" },
 		file_sorter = require("telescope.sorters").get_fzf_sorter,
 		prompt_prefix = " >",
@@ -31,9 +34,15 @@ telescope.setup({
 			n = {
 				["q"] = actions.close,
 			},
-			extensions = {
-				-- TODO: Octo https://github.com/pwntester/octo.nvim
-			},
+		},
+		extensions = {
+			-- TODO: Octo https://github.com/pwntester/octo.nvim
 		},
 	},
 })
+
+-- Enable telescope fzf native, if installed
+local ok = pcall(require("telescope").load_extension, "fzf")
+if not ok then
+	notifier.notify("FZF not installed", { type = "warn", title = "Telescope" })
+end

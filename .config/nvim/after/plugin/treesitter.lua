@@ -1,5 +1,6 @@
 require("nvim-treesitter.configs").setup({
 	ensure_installed = {
+		"help",
 		"tsx",
 		"toml",
 		"bash",
@@ -16,6 +17,7 @@ require("nvim-treesitter.configs").setup({
 		"css",
 	},
 	sync_install = false,
+	auto_install = true,
 
 	autotag = {
 		enable = true,
