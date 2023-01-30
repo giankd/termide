@@ -13,7 +13,7 @@ end
 M.goto_prev_d = function()
 	local has_saga_diagnostic, saga_d = pcall(require, "lspsaga.diagnostic")
 	if has_saga_diagnostic then
-		saga_d:goto_prev()
+		saga_d:goto_prev({ severity = vim.diagnostic.severity.WARN })
 		return
 	end
 	vim.diagnostic.goto_prev({ float = true })
@@ -31,7 +31,7 @@ end
 M.goto_next_d = function()
 	local has_saga_diagnostic, saga_d = pcall(require, "lspsaga.diagnostic")
 	if has_saga_diagnostic then
-		saga_d:goto_next()
+		saga_d:goto_next({ severity = vim.diagnostic.severity.WARN })
 		return
 	end
 	vim.diagnostic.goto_next({ float = true })
