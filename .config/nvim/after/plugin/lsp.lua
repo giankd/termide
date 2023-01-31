@@ -285,8 +285,28 @@ if has_cmp then
 		["<C-u>"] = cmp.mapping.scroll_docs(-1),
 		["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
 		["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
-		["<S-Tab>"] = cmp.mapping.select_prev_item(cmp_select),
-		["<Tab>"] = cmp.mapping.select_next_item(cmp_select),
+		["<S-Tab>"] = cmp.mapping(function(fallback)
+			local imported, luasnip = pcall(require, "luasnip")
+			if cmp.visible() then
+				cmp.select_prev_item(cmp_select)
+			elseif imported and luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
+		["<Tab>"] = cmp.mapping(function(fallback)
+			local imported, luasnip = pcall(require, "luasnip")
+			if cmp.visible() then
+				cmp.select_next_item(cmp_select)
+			elseif imported and luasnip.expandable() then
+				luasnip.expand()
+			elseif imported and luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end, { "i", "s" }),
 		["<C-x>"] = cmp.mapping.complete({
 			config = {
 				sources = cmp_sources,
