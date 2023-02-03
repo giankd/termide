@@ -84,6 +84,9 @@ require("formatter").setup({
 		sh = {
 			require("formatter.filetypes.sh").shfmt,
 		},
+		php = {
+			require("formatter.filetypes.php").phpcbf,
+		},
 
 		-- Use the special "*" filetype for defining formatter configurations on
 		-- any filetype
