@@ -95,7 +95,6 @@ require("mason").setup({
 	},
 })
 require("mason-lspconfig").setup({
-	-- ensure_installed = { "sumneko_lua" },
 	automatic_installation = true,
 })
 
@@ -107,7 +106,7 @@ lsp.ensure_installed({
 	"cssls",
 	"stylelint_lsp",
 	"tailwindcss",
-	"sumneko_lua",
+	"lua_ls",
 	"vimls",
 	"gopls",
 	"bashls",
@@ -203,6 +202,12 @@ lsp.set_preferences({
 	},
 })
 
+local cssls_capabilities = vim.lsp.protocol.make_client_capabilities()
+cssls_capabilities.textDocument.completion.completionItem.snippetSupport = true
+lsp.configure("cssls", {
+	capabilities = cssls_capabilities,
+})
+
 lsp.configure("stylelint_lsp", {
 	settings = {
 		stylelintplus = {
@@ -239,7 +244,7 @@ lsp.configure("gopls", {
 	},
 })
 
-lsp.configure("sumneko_lua", {
+lsp.configure("lua_ls", {
 	settings = {
 		Lua = {
 			completion = {
