@@ -369,10 +369,11 @@ if has_cmp then
 	local cmp_select = { behavior = cmp.SelectBehavior.Select }
 	local cmp_sources = {
 		{ name = "nvim_lsp" },
+		{ name = "nvim_lsp_signature_help" },
+		{ name = "nvim_lua" },
 		{ name = "luasnip" },
 		{ name = "buffer" },
 		{ name = "path" },
-		{ name = "nvim_lsp_signature_help" },
 	}
 	local cmp_mappings = lsp.defaults.cmp_mappings({
 		["<C-d>"] = cmp.mapping.scroll_docs(1),
@@ -474,6 +475,16 @@ if has_lspsaga then
 		scroll_preview = {
 			scroll_down = "<C-d>",
 			scroll_up = "<C-u>",
+		},
+		code_action = {
+			num_shortcut = true,
+			show_server_name = true,
+			extend_gitsigns = false,
+			keys = {
+				-- string | table type
+				quit = "q",
+				exec = "<CR>",
+			},
 		},
 		request_timeout = 2000,
 		symbol_in_winbar = {
