@@ -1,3 +1,4 @@
+local whichkey = require("which-key")
 local Remap = require("giankd.keymap")
 local nnoremap = Remap.nnoremap
 local nmap = Remap.nmap
@@ -26,6 +27,27 @@ local function diffCurrentLines()
 	print(vim.fn.mode())
 	vim.notify("Mode not ready", vim.log.levels.ERROR)
 end
+
+local static_keymaps = {
+	G = {
+		name = "Git",
+		["B"] = { "<cmd>Git blame<cr>", "Blame mode (Fugitive)" },
+		["l"] = { "<cmd>0GcLog<cr>", "Previous versions" },
+		["m"] = { "<cmd>G mergetool", "Merge Tool" },
+		["c"] = {
+			name = "Conflicts",
+			["o"] = { "<cmd>Gvdiffsplit<CR>", "Open Diff Tool" },
+			["k"] = { "[c", "Previous hunk" },
+			["j"] = { "]c", "Next hunk" },
+			["c"] = { "dp", "Put" },
+			["h"] = { "<cmd>diffget :2<CR>", "Get from left" },
+			["l"] = { "<cmd>diffget :3<CR>", "Get from right" },
+			["s"] = { "<cmd>Gwrite!<CR>", "Resolve" },
+		},
+	},
+}
+
+whichkey.register(static_keymaps, { prefix = "<leader>", mode = "n", noremap = true })
 
 require("gitsigns").setup({
 	signs = {
@@ -122,7 +144,6 @@ require("gitsigns").setup({
 		end, { expr = true })
 
 		-- Actions
-		local whichkey = require("which-key")
 		local keymap_g_n = {
 			G = {
 				name = "Git",
@@ -138,9 +159,7 @@ require("gitsigns").setup({
 					end,
 					"All Changes",
 				},
-				["s"] = { "<cmd>Gitsigns stage_hunk<CR>", "Stage Hunk" },
 				["S"] = { gs.stage_buffer, "Stage Buffer" },
-				["r"] = { "<cmd>Gitsigns reset_hunk<CR>", "Reset Hunk" },
 				["R"] = { gs.reset_buffer, "Reset Buffer" },
 				["u"] = { gs.undo_stage_hunk, "Unstage Hunk" },
 				["P"] = { gs.preview_hunk, "Preview Hunk" },
@@ -151,8 +170,6 @@ require("gitsigns").setup({
 					end,
 					"Blame Line (Signs)",
 				},
-				["B"] = { "<cmd>Git blame<cr>", "Blame mode (Fugitive)" },
-				["l"] = { "<cmd>0GcLog<cr>", "Previous versions" },
 				["d"] = { gs.diffthis, "Diff" },
 				["D"] = {
 					function()
@@ -165,15 +182,6 @@ require("gitsigns").setup({
 				["tb"] = { gs.toggle_current_line_blame, "Toggle Blame Line" },
 				["td"] = { gs.toggle_deleted, "Toggle Deleted" },
 				["tl"] = { gs.toggle_linehl, "Toggle Line HL" },
-				["c"] = {
-					name = "Conflicts",
-					["k"] = { "[c", "Previous hunk" },
-					["j"] = { "]c", "Next hunk" },
-					["c"] = { "dp", "Put" },
-					["h"] = { "<cmd>diffget :2<CR>", "Get from left" },
-					["l"] = { "<cmd>diffget :3<CR>", "Get from right" },
-					["s"] = { "<cmd>Gwrite!<CR>", "Resolve" },
-				},
 			},
 		}
 
