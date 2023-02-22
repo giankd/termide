@@ -41,4 +41,10 @@ vim.opt.updatetime = 150
 -- Don't pass messages to |ins-completion-menu|.
 vim.opt.shortmess:append("c")
 
+-- File navigation
+vim.g.netrw_browse_split = 0
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 35
+vim.g.netrw_list_hide = 0
+
 vim.g.mapleader = " "
