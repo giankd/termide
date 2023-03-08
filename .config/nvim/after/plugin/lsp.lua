@@ -37,45 +37,6 @@ local kind = {
 	Operator = "ﬦ",
 	TypeParameter = "",
 }
-local lsp_kind = {
-	File = " ",
-	Module = " ",
-	Namespace = " ",
-	Package = " ",
-	Class = " ",
-	Method = " ",
-	Property = " ",
-	Field = " ",
-	Constructor = " ",
-	Enum = "了",
-	Interface = " ",
-	Function = " ",
-	Variable = " ",
-	Constant = " ",
-	String = " ",
-	Number = " ",
-	Boolean = " ",
-	Array = " ",
-	Object = " ",
-	Key = " ",
-	Null = " ",
-	EnumMember = " ",
-	Struct = " ",
-	Event = " ",
-	Operator = " ",
-	TypeParameter = " ",
-	-- ccls
-	TypeAlias = " ",
-	Parameter = " ",
-	StaticMethod = "ﴂ ",
-	Macro = " ",
-	-- for completion sb microsoft!!!
-	Text = " ",
-	Snippet = " ",
-	Folder = " ",
-	Unit = " ",
-	Value = " ",
-}
 local menu_icons = {
 	nvim_lsp = "λ",
 	luasnip = "",
@@ -462,11 +423,6 @@ end
 -- UI
 local has_lspsaga, lspsaga = pcall(require, "lspsaga")
 if has_lspsaga then
-	for k, v in pairs(kind) do
-		if lsp_kind[k] then
-			lsp_kind[k] = v
-		end
-	end
 	lspsaga.setup({
 		preview = {
 			lines_above = 0,
@@ -527,7 +483,7 @@ if has_lspsaga then
 				white = "#d1d4cf",
 				black = "#1c1c19",
 			},
-			kind = lsp_kind,
+			kind,
 		},
 	})
 end
