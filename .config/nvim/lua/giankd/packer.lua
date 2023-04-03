@@ -67,11 +67,16 @@ return require("packer").startup(function(use)
 			{ "rafamadriz/friendly-snippets" },
 
 			-- UI
+			-- {
+			-- 	"glepnir/lspsaga.nvim",
+			-- 	branch = "main",
+			-- 	requires = { { "nvim-tree/nvim-web-devicons" } },
+			-- },
+			{ "dnlhc/glance.nvim" }, -- LSP goto UI
 			{
-				"glepnir/lspsaga.nvim",
-				branch = "main",
-				requires = { { "nvim-tree/nvim-web-devicons" } },
-			},
+				"weilbith/nvim-code-action-menu",
+				cmd = "CodeActionMenu",
+			}, -- Code Actions UI
 			{ "j-hui/fidget.nvim" }, -- LSP Progress UI
 		},
 	})

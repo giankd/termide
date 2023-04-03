@@ -52,7 +52,10 @@ M.code_actions = function()
 		vim.cmd("Lspsaga code_action")
 		return
 	end
-	vim.lsp.buf.code_action()
+	local has_action_menu = pcall(vim.cmd, "CodeActionMenu")
+	if not has_action_menu then
+		vim.lsp.buf.code_action()
+	end
 end
 
 M.workspace_diagnostics = function()
@@ -69,12 +72,12 @@ M.buf_diagnostics = function()
 		return
 	end
 
-	local ok, builtin = pcall(require, "telescope.builtin")
-	if not ok then
-		utils.notify("Not implemented", { type = "warn" })
+	local has_telescope, builtin = pcall(require, "telescope.builtin")
+	if has_telescope then
+		builtin.diagnostics()
 		return
 	end
-	builtin.diagnostics()
+	utils.notify("Not implemented", { type = "warn" })
 end
 
 M.line_diagnostics = function()
@@ -102,15 +105,21 @@ M.finder = function()
 		return
 	end
 
-	local ok, telescope = pcall(require, "telescope.builtin")
-	if not ok then
-		vim.lsp.buf.references()
+	local has_glance = pcall(require, "glance")
+	if has_glance then
+		vim.cmd("Glance references")
 		return
 	end
-	telescope.lsp_references({
-		include_declaration = true,
-		jump_type = "never",
-	})
+
+	local has_telescope, telescope = pcall(require, "telescope.builtin")
+	if has_telescope then
+		telescope.lsp_references({
+			include_declaration = true,
+			jump_type = "never",
+		})
+		return
+	end
+	vim.lsp.buf.references()
 end
 
 M.signature_help = function()
@@ -132,14 +141,20 @@ M.peek_definition = function()
 		vim.cmd("Lspsaga peek_definition")
 		return
 	end
-	local ok, telescope = pcall(require, "telescope.builtin")
-	if not ok then
-		utils.notify("Not implemented", { type = "warn" })
+	local has_glance = pcall(require, "glance")
+	if has_glance then
+		vim.cmd("Glance definitions")
 		return
 	end
-	telescope.lsp_definitions({
-		jump_type = "never",
-	})
+
+	local has_telescope, telescope = pcall(require, "telescope.builtin")
+	if has_telescope then
+		telescope.lsp_definitions({
+			jump_type = "never",
+		})
+		return
+	end
+	utils.notify("Not implemented", { type = "warn" })
 end
 
 M.goto_definition = function()
@@ -148,6 +163,13 @@ M.goto_definition = function()
 		vim.cmd("Lspsaga goto_definition")
 		return
 	end
+
+	local has_glance = pcall(require, "glance")
+	if has_glance then
+		vim.cmd("Glance definitions")
+		return
+	end
+
 	vim.lsp.buf.definition()
 end
 
@@ -156,18 +178,30 @@ M.goto_declaration = function()
 end
 
 M.goto_implementation = function()
+	local has_glance = pcall(require, "glance")
+	if has_glance then
+		vim.cmd("Glance implementations")
+		return
+	end
 	vim.lsp.buf.implementation()
 end
 
 M.goto_type_def = function()
-	local ok, telescope = pcall(require, "telescope.builtin")
-	if not ok then
-		vim.lsp.buf.type_definition()
+	local has_glance = pcall(require, "glance")
+	if has_glance then
+		vim.cmd("Glance type_definitions")
 		return
 	end
-	telescope.lsp_type_definitions({
-		jump_type = "never",
-	})
+
+	local has_telescope, telescope = pcall(require, "telescope.builtin")
+	if has_telescope then
+		telescope.lsp_type_definitions({
+			jump_type = "never",
+		})
+		return
+	end
+
+	vim.lsp.buf.type_definition()
 end
 
 M.outline = function()
@@ -177,22 +211,17 @@ M.outline = function()
 		return
 	end
 
-	local ok = pcall(vim.cmd, "SymbolsOutline")
-	if not ok then
-		vim.lsp.buf.workspace_symbols()
+	local has_telescope, telescope = pcall(require, "telescope.builtin")
+	if has_telescope then
+		telescope.lsp_workspace_symbols()()
+		return
 	end
+
+	vim.lsp.buf.workspace_symbols()
 end
 
 M.references = function()
-	local ok, telescope = pcall(require, "telescope.builtin")
-	if not ok then
-		vim.lsp.buf.references()
-		return
-	end
-	telescope.lsp_references({
-		include_declaration = true,
-		jump_type = "never",
-	})
+	M.finder()
 end
 
 M.organize_imports = function()
