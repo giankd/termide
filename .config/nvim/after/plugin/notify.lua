@@ -7,6 +7,7 @@ end
 
 notify.setup({
 	background_colour = "#000000",
+	timeout = 2000,
 	icons = {
 		DEBUG = "",
 		ERROR = "",
