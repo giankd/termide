@@ -344,8 +344,9 @@ if has_cmp then
 		["<S-Tab>"] = cmp.mapping(function(fallback)
 			local imported, luasnip = pcall(require, "luasnip")
 			if cmp.visible() then
-				cmp.select_prev_item(cmp_select)
-			elseif imported and luasnip.jumpable(-1) then
+				cmp.mapping.abort()
+			end
+			if imported and luasnip.jumpable(-1) then
 				luasnip.jump(-1)
 			else
 				fallback()
@@ -354,8 +355,9 @@ if has_cmp then
 		["<Tab>"] = cmp.mapping(function(fallback)
 			local imported, luasnip = pcall(require, "luasnip")
 			if cmp.visible() then
-				cmp.select_next_item(cmp_select)
-			elseif imported and luasnip.expandable() then
+				cmp.mapping.abort()
+			end
+			if imported and luasnip.expandable() then
 				luasnip.expand()
 			elseif imported and luasnip.expand_or_jumpable() then
 				luasnip.expand_or_jump()
