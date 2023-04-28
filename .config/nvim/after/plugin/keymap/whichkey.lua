@@ -106,12 +106,12 @@ local mappings = {
 		name = "Window",
 		v = { "<cmd>vsplit<CR>", "Vertical Split" },
 		s = { "<cmd>split<CR>", "Horizontal Split" },
-		h = { "<C-w><", "Resize left" },
-		l = { "<C-w>>", "Resize right" },
-		L = { "<C-w>|", "Fold vertical window" },
-		k = { "<C-w>+", "Resize up" },
-		j = { "<C-w>-", "Resize down" },
-		J = { "<C-w>_", "Fold horizontal window" },
+		h = { "<C-w><", "Decrease width" },
+		l = { "<C-w>>", "Increase width" },
+		L = { "<C-w>|", "Maximize width" },
+		k = { "<C-w>+", "Decrease height" },
+		j = { "<C-w>-", "Increase height" },
+		J = { "<C-w>_", "Maximize height" },
 	},
 
 	z = {
