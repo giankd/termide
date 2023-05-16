@@ -11,38 +11,38 @@ local lsphelper = require("giankd.lsp-utils")
 local nnoremap = Remap.nnoremap
 
 local kind = {
-	Text = "",
-	Method = "",
-	Function = "",
+	Text = "⊜",
+	Method = "⇒",
+	Function = "⨐",
 	Constructor = "",
-	Field = "ﰠ",
-	Variable = "",
-	Class = "ﴯ",
+	Field = "⤇",
+	Variable = "𝛂",
+	Class = "𝛀",
 	Interface = "",
 	Module = "",
 	Property = "",
 	Unit = "",
-	Value = "",
+	Value = "𝞈",
 	Enum = "",
-	Keyword = "",
-	Snippet = "﬌",
+	Keyword = "⚿",
+	Snippet = "⟬⟭",
 	Color = "",
-	File = "",
-	Reference = "",
+	File = "⊳",
+	Reference = "※",
 	Folder = "",
 	EnumMember = "",
-	Constant = "",
-	Struct = "פּ",
-	Event = "",
-	Operator = "ﬦ",
+	Constant = "ℇ",
+	Struct = "λ",
+	Event = "⇝",
+	Operator = "±",
 	TypeParameter = "",
 }
 local menu_icons = {
 	nvim_lsp = "λ",
 	luasnip = "",
-	buffer = "",
+	buffer = "♽",
 	path = "",
-	nvim_lua = "",
+	nvim_lua = "",
 }
 
 -- Installer
@@ -156,9 +156,9 @@ lsp.set_preferences({
 	set_lsp_keymaps = false, -- set to false if you want to configure your own keybindings
 	manage_nvim_cmp = false, -- set to false if you want to configure nvim-cmp on your own
 	sign_icons = {
-		error = "",
-		warn = "",
-		hint = "",
+		error = "⚠",
+		warn = "⛏",
+		hint = "◉",
 		info = "➜",
 	},
 })
@@ -549,35 +549,35 @@ if has_glance then
 				["<S-Tab>"] = actions.previous_location,
 				["<leader>o"] = actions.enter_win("list"), -- Focus list window
 			},
-			folds = {
-				fold_closed = "",
-				fold_open = "",
-				folded = true, -- Automatically fold list on startup
-			},
-			indent_lines = {
-				enable = true,
-				icon = "│",
-			},
-			winbar = {
-				enable = false, -- Available strating from nvim-0.8+
-			},
-			hooks = {
-				-- Don't open glance when there is only one result and it is located in the current buffer, open otherwise
-				before_open = function(results, open, jump, method)
-					local uri = vim.uri_from_bufnr(0)
-					if #results == 1 then
-						local target_uri = results[1].uri or results[1].targetUri
+		},
+		folds = {
+			fold_closed = "",
+			fold_open = "",
+			folded = true, -- Automatically fold list on startup
+		},
+		indent_lines = {
+			enable = true,
+			icon = "│",
+		},
+		winbar = {
+			enable = false, -- Available strating from nvim-0.8+
+		},
+		hooks = {
+			-- Don't open glance when there is only one result and it is located in the current buffer, open otherwise
+			before_open = function(results, open, jump, method)
+				local uri = vim.uri_from_bufnr(0)
+				if #results == 1 then
+					local target_uri = results[1].uri or results[1].targetUri
 
-						if target_uri == uri then
-							jump(results[1])
-						else
-							open(results)
-						end
+					if target_uri == uri then
+						jump(results[1])
 					else
 						open(results)
 					end
-				end,
-			},
+				else
+					open(results)
+				end
+			end,
 		},
 	})
 end
