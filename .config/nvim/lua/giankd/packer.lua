@@ -77,7 +77,7 @@ return require("packer").startup(function(use)
 				"weilbith/nvim-code-action-menu",
 				cmd = "CodeActionMenu",
 			}, -- Code Actions UI
-			{ "j-hui/fidget.nvim" }, -- LSP Progress UI
+			{ "j-hui/fidget.nvim", tag = "legacy" }, -- LSP Progress UI
 		},
 	})
 
