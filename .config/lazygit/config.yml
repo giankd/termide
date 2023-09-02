@@ -41,7 +41,7 @@ customCommands:
         title: "Confirm:"
         body: "Are you sure you want to reset HEAD to {{.CheckedOutBranch.UpstreamRemote}}?"
   - key: "b"
-    command: "git branch --merged master | grep -v '^[ *]*master$' | xargs git branch -d"
+    command: "git branch --merged | grep -v '^[ *]|master|main|dev' | xargs git branch -d"
     context: "localBranches"
     loadingText: "Pruning..."
     description: "prune local branches that have been merged to master"
