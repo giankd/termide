@@ -77,7 +77,6 @@ lazy.setup({
 			-- refer to the configuration section
 		},
 	},
-	{ "mhartington/formatter.nvim", lazy = true },
 	{ "windwp/nvim-autopairs", lazy = true },
 	{ "windwp/nvim-ts-autotag", lazy = true },
 	{ "rcarriga/nvim-notify" },
@@ -102,23 +101,21 @@ lazy.setup({
 		cmd = { "LspInfo", "LspInstall", "LspStart" },
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
+			{ "folke/neodev.nvim", opts = {} },
 			{ "hrsh7th/cmp-nvim-lsp" },
 			{ "williamboman/mason-lspconfig.nvim" },
-			{
-				"j-hui/fidget.nvim",
-				config = function()
-					require("giankd.plugins.fidget").config()
-				end,
-			}, -- LSP Progress UI
-			{
-				"aznhe21/actions-preview.nvim",
-				config = function()
-					require("giankd.plugins.actions-preview").config()
-				end,
-			}, -- Code Actions UI
+			{ "mhartington/formatter.nvim", config = require("giankd.plugins.formatter").config },
+			{ "j-hui/fidget.nvim", config = require("giankd.plugins.fidget").config }, -- LSP Progress UI
+			{ "aznhe21/actions-preview.nvim", config = require("giankd.plugins.actions-preview").config }, -- Code Actions UI
 		},
+		config = require("giankd.plugins.lsp").config,
+	},
+
+	{
+		"mfussenegger/nvim-lint",
+		event = "BufWritePost",
 		config = function()
-			require("giankd.plugins.lsp").config()
+			require("giankd.plugins.linter").config()
 		end,
 	},
 

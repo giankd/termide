@@ -207,7 +207,6 @@ M.config = function()
 				})
 			end,
 			tailwindcss = function()
-				utils.notify("Attaching tailwind with config", { type = "info", title = "LSP" })
 				require("lspconfig").tailwindcss.setup({
 					settings = {
 						tailwindCSS = {
