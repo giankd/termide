@@ -2,59 +2,33 @@ local utils = require("giankd.notify")
 local M = {}
 
 M.hover = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga hover_doc")
-		return
-	end
 	vim.lsp.buf.hover()
 end
 
 M.goto_prev_d = function()
-	local has_saga_diagnostic, saga_d = pcall(require, "lspsaga.diagnostic")
-	if has_saga_diagnostic then
-		saga_d:goto_prev()
-		return
-	end
 	vim.diagnostic.goto_prev({ float = true })
 end
 
 M.goto_prev_e = function()
-	local has_saga_diagnostic, saga_d = pcall(require, "lspsaga.diagnostic")
-	if has_saga_diagnostic then
-		saga_d:goto_prev({ severity = vim.diagnostic.severity.ERROR })
-		return
-	end
 	vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, float = true })
 end
 
 M.goto_next_d = function()
-	local has_saga_diagnostic, saga_d = pcall(require, "lspsaga.diagnostic")
-	if has_saga_diagnostic then
-		saga_d:goto_next()
-		return
-	end
 	vim.diagnostic.goto_next({ float = true })
 end
 
 M.goto_next_e = function()
-	local has_saga_diagnostic, saga_d = pcall(require, "lspsaga.diagnostic")
-	if has_saga_diagnostic then
-		saga_d:goto_next({ severity = vim.diagnostic.severity.ERROR })
-		return
-	end
 	vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, float = true })
 end
 
 M.code_actions = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga code_action")
-		return
-	end
-	local has_action_menu = pcall(vim.cmd, "CodeActionMenu")
-	if not has_action_menu then
+	local has_menu, menu = pcall(require, "actions-preview")
+	if has_menu then
+		menu.code_actions()
+	elseif vim.lsp.buf.code_action ~= nil then
 		vim.lsp.buf.code_action()
+	else
+		utils.notify("No code action window available", { type = "error" })
 	end
 end
 
@@ -66,12 +40,6 @@ M.workspace_diagnostics = function()
 end
 
 M.buf_diagnostics = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga show_buf_diagnostics")
-		return
-	end
-
 	local has_telescope, builtin = pcall(require, "telescope.builtin")
 	if has_telescope then
 		builtin.diagnostics()
@@ -81,30 +49,14 @@ M.buf_diagnostics = function()
 end
 
 M.line_diagnostics = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga show_line_diagnostics")
-		return
-	end
 	utils.notify("Not implemented", { type = "warn" })
 end
 
 M.cursor_diagnostics = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga show_cursor_diagnostics")
-		return
-	end
 	vim.diagnostic.open_float()
 end
 
 M.finder = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga lsp_finder")
-		return
-	end
-
 	local has_glance = pcall(require, "glance")
 	if has_glance then
 		vim.cmd("Glance references")
@@ -127,20 +79,10 @@ M.signature_help = function()
 end
 
 M.rename = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga rename")
-		return
-	end
 	vim.lsp.buf.rename()
 end
 
 M.peek_definition = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga peek_definition")
-		return
-	end
 	local has_glance = pcall(require, "glance")
 	if has_glance then
 		vim.cmd("Glance definitions")
@@ -158,12 +100,6 @@ M.peek_definition = function()
 end
 
 M.goto_definition = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga goto_definition")
-		return
-	end
-
 	local has_glance = pcall(require, "glance")
 	if has_glance then
 		vim.cmd("Glance definitions")
@@ -205,12 +141,6 @@ M.goto_type_def = function()
 end
 
 M.outline = function()
-	local has_saga = pcall(require, "lspsaga")
-	if has_saga then
-		vim.cmd("Lspsaga outline")
-		return
-	end
-
 	local has_telescope, telescope = pcall(require, "telescope.builtin")
 	if has_telescope then
 		telescope.lsp_workspace_symbols()()

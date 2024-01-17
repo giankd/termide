@@ -1,5 +1,5 @@
 require("giankd.set")
-require("giankd.packer")
+require("giankd.lazy")
 require("giankd.debugger")
 
 local augroup = vim.api.nvim_create_augroup

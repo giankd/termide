@@ -1,6 +1,8 @@
 require("nvim-treesitter.configs").setup({
-	ensure_installed = {
+	ignore_install = {
 		"help",
+	},
+	ensure_installed = {
 		"tsx",
 		"toml",
 		"bash",

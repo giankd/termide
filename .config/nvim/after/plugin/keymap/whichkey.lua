@@ -115,12 +115,14 @@ local mappings = {
 	},
 
 	z = {
-		name = "Packer",
-		c = { "<cmd>PackerCompile<cr>", "Compile" },
-		i = { "<cmd>PackerInstall<cr>", "Install" },
-		S = { "<cmd>PackerStatus<cr>", "Status" },
-		s = { "<cmd>PackerSync<cr>", "Sync" },
-		u = { "<cmd>PackerUpdate<cr>", "Update" },
+		name = "Lazy",
+		c = { "<cmd>Lazy clean<cr>", "Clean" },
+		i = { "<cmd>Lazy install<cr>", "Install" },
+		S = { "<cmd>Lazy sync<cr>", "Sync" },
+		s = { "<cmd>Lazy check<cr>", "Check" },
+		u = { "<cmd>Lazy update<cr>", "Update" },
+		h = { "<cmd>Lazy home<cr>", "Home" },
+		H = { "<cmd>Lazy help<cr>", "Help" },
 	},
 
 	D = {

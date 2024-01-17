@@ -44,6 +44,7 @@ local menu_icons = {
 	path = "",
 	nvim_lua = "",
 }
+local lsp_capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 -- Installer
 require("mason").setup({
@@ -57,21 +58,203 @@ require("mason").setup({
 })
 require("mason-lspconfig").setup({
 	automatic_installation = true,
-})
+	ensure_installed = {
+		"tsserver",
+		"eslint",
+		-- "cssls",
+		"stylelint_lsp",
+		"tailwindcss",
+		"lua_ls",
+		"vimls",
+		"gopls",
+		"bashls",
+		"intelephense",
+	},
+	handlers = {
+		lsp.default_setup,
+		lua_ls = function()
+			local lua_opts = lsp.nvim_lua_ls()
+			require("lspconfig").lua_ls.setup(lua_opts)
+		end,
+		tsserver = function()
+			require("lspconfig").tsserver.setup({ capabilities = lsp_capabilities })
+		end,
+		eslint = function()
+			require("lspconfig").eslint.setup({
+				format = false,
+			})
+		end,
+		cssls = function()
+			local tw_config_path = vim.fn.stdpath("config") .. "/after/plugin/tailwind-atrules.json"
+			local cssls_capabilities = require("cmp_nvim_lsp").default_capabilities()
+			cssls_capabilities.textDocument.completion.completionItem.snippetSupport = true
+			require("lspconfig").cssls.setup({
+				capabilities = cssls_capabilities,
+				settings = {
+					css = {
+						lint = {
+							customData = { tw_config_path },
+						},
+					},
+					less = {
+						customData = { tw_config_path },
+					},
+					scss = {
+						customData = { tw_config_path },
+					},
+				},
+			})
+		end,
+		stylelint_lsp = function()
+			require("lspconfig").stylelint_lsp.setup({
+				settings = {
+					stylelintplus = {
+						-- see available options in stylelint-lsp documentation
+						autoFixOnSave = false,
+						autoFixOnFormat = true,
+					},
+				},
+			})
+		end,
+		html = function()
+			require("lspconfig").html.setup({
+				settings = {
+					init_options = {
+						configurationSection = { "html", "css", "javascript" },
+						embeddedLanguages = {
+							css = true,
+							javascript = true,
+						},
+						provideFormatter = false,
+					},
+				},
+			})
+		end,
+		gopls = function()
+			require("lspconfig").gopls.setup({
+				settings = {
+					gopls = {
+						experimentalPostfixCompletions = true,
+						analyses = {
+							unusedparams = true,
+							shadow = true,
+						},
+						staticcheck = true,
+					},
+				},
+			})
+		end,
+		intelephense = function()
+			-- Default stubs picked from https://emacs-lsp.github.io/lsp-mode/page/lsp-intelephense/
+			-- Added wordpress stub
+			local intelephense_stubs = {
+				"apache",
+				"bcmath",
+				"bz2",
+				"calendar",
+				"com_dotnet",
+				"Core",
+				"ctype",
+				"curl",
+				"date",
+				"dba",
+				"dom",
+				"enchant",
+				"exif",
+				"fileinfo",
+				"filter",
+				"fpm",
+				"ftp",
+				"gd",
+				"hash",
+				"iconv",
+				"imap",
+				"interbase",
+				"intl",
+				"json",
+				"ldap",
+				"libxml",
+				"mbstring",
+				"mcrypt",
+				"meta",
+				"mssql",
+				"mysqli",
+				"oci8",
+				"odbc",
+				"openssl",
+				"pcntl",
+				"pcre",
+				"PDO",
+				"pdo_ibm",
+				"pdo_mysql",
+				"pdo_pgsql",
+				"pdo_sqlite",
+				"pgsql",
+				"Phar",
+				"posix",
+				"pspell",
+				"readline",
+				"recode",
+				"Reflection",
+				"regex",
+				"session",
+				"shmop",
+				"SimpleXML",
+				"snmp",
+				"soap",
+				"sockets",
+				"sodium",
+				"SPL",
+				"sqlite3",
+				"standard",
+				"superglobals",
+				"sybase",
+				"sysvmsg",
+				"sysvsem",
+				"sysvshm",
+				"tidy",
+				"tokenizer",
+				"wddx",
+				"wordpress",
+				"xml",
+				"xmlreader",
+				"xmlrpc",
+				"xmlwriter",
+				"Zend",
+				"OPcache",
+				"zip",
+				"zlib",
+			}
 
-lsp.preset("lsp-compe")
-lsp.ensure_installed({
-	"rust_analyzer",
-	"tsserver",
-	"eslint",
-	"cssls",
-	"stylelint_lsp",
-	"tailwindcss",
-	"lua_ls",
-	"vimls",
-	"gopls",
-	"bashls",
-	"svelte",
+			require("lspconfig").intelephense.setup({
+				settings = {
+					intelephense = {
+						stubs = intelephense_stubs,
+					},
+				},
+			})
+		end,
+		tailwindcss = function()
+			utils.notify("Attaching tailwind with config", { type = "info", title = "LSP" })
+			require("lspconfig").tailwindcss.setup({
+				settings = {
+					tailwindCSS = {
+						classAttributes = { "class", "className", "class:list", "classList", "ngClass" },
+						lint = {
+							cssConflict = "warning",
+							invalidApply = "error",
+							invalidConfigPath = "error",
+							invalidScreen = "error",
+							invalidTailwindDirective = "error",
+							invalidVariant = "error",
+							recommendedVariantOrder = "warning",
+						},
+						validate = true,
+					},
+				},
+			})
+		end,
+	},
 })
 
 -- Global Utils keymaps
@@ -151,157 +334,11 @@ local on_attach = function(client, bufnr)
 	whichkey.register(keymap_g, { buffer = bufnr, prefix = "<leader>" })
 end
 
-lsp.set_preferences({
-	suggest_lsp_servers = true,
-	set_lsp_keymaps = false, -- set to false if you want to configure your own keybindings
-	manage_nvim_cmp = false, -- set to false if you want to configure nvim-cmp on your own
-	sign_icons = {
-		error = "⚠",
-		warn = "⛏",
-		hint = "◉",
-		info = "➜",
-	},
-})
-
-local cssls_capabilities = vim.lsp.protocol.make_client_capabilities()
-cssls_capabilities.textDocument.completion.completionItem.snippetSupport = true
-lsp.configure("cssls", {
-	capabilities = cssls_capabilities,
-})
-
-lsp.configure("stylelint_lsp", {
-	settings = {
-		stylelintplus = {
-			-- see available options in stylelint-lsp documentation
-			autoFixOnSave = false,
-			autoFixOnFormat = true,
-		},
-	},
-})
-
-lsp.configure("html", {
-	settings = {
-		init_options = {
-			configurationSection = { "html", "css", "javascript" },
-			embeddedLanguages = {
-				css = true,
-				javascript = true,
-			},
-			provideFormatter = false,
-		},
-	},
-})
-
-lsp.configure("gopls", {
-	settings = {
-		gopls = {
-			experimentalPostfixCompletions = true,
-			analyses = {
-				unusedparams = true,
-				shadow = true,
-			},
-			staticcheck = true,
-		},
-	},
-})
-
-lsp.configure("lua_ls", {
-	settings = {
-		Lua = {
-			completion = {
-				callSnippet = "Replace",
-			},
-		},
-	},
-})
-
--- Default stubs picked from https://emacs-lsp.github.io/lsp-mode/page/lsp-intelephense/
--- Added wordpress stub
-local intelephense_stubs = {
-	"apache",
-	"bcmath",
-	"bz2",
-	"calendar",
-	"com_dotnet",
-	"Core",
-	"ctype",
-	"curl",
-	"date",
-	"dba",
-	"dom",
-	"enchant",
-	"exif",
-	"fileinfo",
-	"filter",
-	"fpm",
-	"ftp",
-	"gd",
-	"hash",
-	"iconv",
-	"imap",
-	"interbase",
-	"intl",
-	"json",
-	"ldap",
-	"libxml",
-	"mbstring",
-	"mcrypt",
-	"meta",
-	"mssql",
-	"mysqli",
-	"oci8",
-	"odbc",
-	"openssl",
-	"pcntl",
-	"pcre",
-	"PDO",
-	"pdo_ibm",
-	"pdo_mysql",
-	"pdo_pgsql",
-	"pdo_sqlite",
-	"pgsql",
-	"Phar",
-	"posix",
-	"pspell",
-	"readline",
-	"recode",
-	"Reflection",
-	"regex",
-	"session",
-	"shmop",
-	"SimpleXML",
-	"snmp",
-	"soap",
-	"sockets",
-	"sodium",
-	"SPL",
-	"sqlite3",
-	"standard",
-	"superglobals",
-	"sybase",
-	"sysvmsg",
-	"sysvsem",
-	"sysvshm",
-	"tidy",
-	"tokenizer",
-	"wddx",
-	"wordpress",
-	"xml",
-	"xmlreader",
-	"xmlrpc",
-	"xmlwriter",
-	"Zend",
-	"OPcache",
-	"zip",
-	"zlib",
-}
-
-lsp.configure("intelephense", {
-	settings = {
-		intelephense = {
-			stubs = intelephense_stubs,
-		},
-	},
+lsp.set_sign_icons({
+	error = "⚠",
+	warn = "⛏",
+	hint = "◉",
+	info = "➜",
 })
 
 -- Setup neovim lua configuration
@@ -322,7 +359,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 })
 
 lsp.on_attach(on_attach)
-lsp.setup()
+require("luasnip.loaders.from_vscode").lazy_load()
 
 -- CMP
 local has_cmp, cmp = pcall(require, "cmp")
@@ -336,7 +373,7 @@ if has_cmp then
 		{ name = "buffer" },
 		{ name = "path" },
 	}
-	local cmp_mappings = lsp.defaults.cmp_mappings({
+	local cmp_mappings = {
 		["<C-d>"] = cmp.mapping.scroll_docs(1),
 		["<C-u>"] = cmp.mapping.scroll_docs(-1),
 		["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
@@ -375,9 +412,9 @@ if has_cmp then
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = true,
 		}),
-	})
+	}
 
-	local cmp_config = lsp.defaults.cmp_config({
+	local cmp_config = {
 		mapping = cmp_mappings,
 		sources = cmp_sources,
 		window = {
@@ -395,23 +432,27 @@ if has_cmp then
 				return item
 			end,
 		},
-	})
+		snippet = {
+			expand = function(args)
+				require("luasnip").lsp_expand(args.body)
+			end,
+		},
+	}
 
 	vim.opt.completeopt = { "menu", "menuone", "noselect" }
 	cmp.setup(cmp_config)
 	-- `/` cmdline setup.
 	cmp.setup.cmdline("/", {
-		mapping = cmp.mapping.preset.cmdline(),
+		mapping = cmp_mappings,
 		sources = {
 			{ name = "buffer" },
 		},
 	})
 	-- `:` cmdline setup.
 	cmp.setup.cmdline(":", {
-		mapping = cmp.mapping.preset.cmdline(),
+		mapping = cmp_mappings,
 		sources = cmp.config.sources({
-			{ name = "path" },
-		}, {
+			{ name = "buffer" },
 			{
 				name = "cmdline",
 				option = {
@@ -423,73 +464,6 @@ if has_cmp then
 end
 
 -- UI
-local has_lspsaga, lspsaga = pcall(require, "lspsaga")
-if has_lspsaga then
-	lspsaga.setup({
-		preview = {
-			lines_above = 0,
-			lines_below = 10,
-		},
-		scroll_preview = {
-			scroll_down = "<C-d>",
-			scroll_up = "<C-u>",
-		},
-		code_action = {
-			num_shortcut = true,
-			show_server_name = true,
-			extend_gitsigns = false,
-			keys = {
-				-- string | table type
-				quit = "q",
-				exec = "<CR>",
-			},
-		},
-		request_timeout = 2000,
-		symbol_in_winbar = {
-			enable = false,
-			separator = " ",
-			hide_keyword = true,
-			show_file = true,
-			folder_level = 2,
-			respect_root = false,
-			color_mode = true,
-		},
-		ui = {
-			-- Currently, only the round theme exists
-			theme = "round",
-			-- This option only works in Neovim 0.9
-			title = true,
-			-- Border type can be single, double, rounded, solid, shadow.
-			border = "double",
-			winblend = 0,
-			expand = "",
-			collapse = "",
-			preview = " ",
-			code_action = "✎",
-			diagnostic = "",
-			incoming = " ",
-			outgoing = " ",
-			colors = {
-				-- Normal background color for floating window
-				normal_bg = "#1d1536",
-				-- Title background color
-				title_bg = "#afd700",
-				red = "#e95678",
-				magenta = "#b33076",
-				orange = "#FF8700",
-				yellow = "#f7bb3b",
-				green = "#afd700",
-				cyan = "#36d0e0",
-				blue = "#61afef",
-				purple = "#CBA6F7",
-				white = "#d1d4cf",
-				black = "#1c1c19",
-			},
-			kind,
-		},
-	})
-end
-
 local has_glance, glance = pcall(require, "glance")
 if has_glance then
 	local actions = glance.actions
