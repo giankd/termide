@@ -24,17 +24,10 @@ lazy.setup({
 		name = "catppuccin",
 		priority = 1000,
 		lazy = false,
-		-- config = function()
-		-- 	require("catppuccin").setup({
-		-- 		flavour = "macchiato",
-		-- 		transparent_background = true,
-		-- 	})
-		-- 	vim.cmd([[colorscheme catppuccin]])
-		-- end,
 	},
 	{
 		"nvim-lualine/lualine.nvim",
-		requires = {
+		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 			lazy = true,
 			config = function()
@@ -85,62 +78,80 @@ lazy.setup({
 		},
 	},
 	{ "mhartington/formatter.nvim", lazy = true },
-	{ "windwp/nvim-autopairs" },
-	{ "windwp/nvim-ts-autotag" },
+	{ "windwp/nvim-autopairs", lazy = true },
+	{ "windwp/nvim-ts-autotag", lazy = true },
 	{ "rcarriga/nvim-notify" },
 
 	-- LSP
-	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
+	{
+		"VonHeikemen/lsp-zero.nvim",
+		branch = "v3.x",
+		lazy = true,
+		config = false,
+		init = function()
+			-- Disable automatic setup, we are doing it manually
+			vim.g.lsp_zero_extend_cmp = 0
+			vim.g.lsp_zero_extend_lspconfig = 0
+		end,
+	},
 
 	-- LSP Support
-	{ "williamboman/mason.nvim" },
-	{ "williamboman/mason-lspconfig.nvim" },
-	{ "neovim/nvim-lspconfig" },
+	{ "williamboman/mason.nvim", lazy = false, config = true },
+	{
+		"neovim/nvim-lspconfig",
+		cmd = { "LspInfo", "LspInstall", "LspStart" },
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "williamboman/mason-lspconfig.nvim" },
+			{
+				"j-hui/fidget.nvim",
+				config = function()
+					require("giankd.plugins.fidget").config()
+				end,
+			}, -- LSP Progress UI
+			{
+				"aznhe21/actions-preview.nvim",
+				config = function()
+					require("giankd.plugins.actions-preview").config()
+				end,
+			}, -- Code Actions UI
+		},
+		config = function()
+			require("giankd.plugins.lsp").config()
+		end,
+	},
 
 	-- Autocompletion
-	{ "hrsh7th/nvim-cmp" },
-	{ "hrsh7th/cmp-nvim-lsp" },
-	{ "hrsh7th/cmp-buffer" },
-	{ "hrsh7th/cmp-path" },
-	{ "hrsh7th/cmp-cmdline" },
-	{ "saadparwaiz1/cmp_luasnip" },
-	{ "hrsh7th/cmp-nvim-lua" },
-	{ "L3MON4D3/LuaSnip" },
-	{ "rafamadriz/friendly-snippets" },
-	{ "dnlhc/glance.nvim" }, -- LSP goto UI
 	{
-		"aznhe21/actions-preview.nvim",
+		"hrsh7th/nvim-cmp",
+		event = { "InsertEnter", "CmdlineEnter" },
+		dependencies = {
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-path" },
+			{ "hrsh7th/cmp-cmdline" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "hrsh7th/cmp-nvim-lua" },
+			{ "L3MON4D3/LuaSnip" },
+			{ "rafamadriz/friendly-snippets" },
+			{
+				"dnlhc/glance.nvim",
+				config = function()
+					require("giankd.plugins.glance").config()
+				end,
+			}, -- LSP goto UI
+		},
 		config = function()
-			require("actions-preview").setup({
-				backend = { "telescope" },
-				-- options related to telescope.nvim
-				telescope = vim.tbl_extend(
-					"force",
-					require("telescope.themes").get_cursor(),
-					-- a table for customizing content
-					{
-						-- a function to make a table containing the values to be displayed.
-						-- fun(action: Action): { title: string, client_name: string|nil }
-						-- make_value = nil,
-
-						-- a function to make a function to be used in `display` of a entry.
-						-- see also `:h telescope.make_entry` and `:h telescope.pickers.entry_display`.
-						-- fun(values: { index: integer, action: Action, title: string, client_name: string }[]): function
-						-- make_make_display = nil,
-					}
-				),
-			})
+			require("giankd.plugins.cmp").config()
 		end,
-	}, -- Code Actions UI
-	{ "j-hui/fidget.nvim" }, -- LSP Progress UI
+	},
 
 	-- Treesitter
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 	{ "nvim-treesitter/nvim-treesitter-context" },
-	{ "leafOfTree/vim-svelte-plugin" },
 
 	-- Debugger
-	{ "mfussenegger/nvim-dap" },
-	{ "rcarriga/nvim-dap-ui" },
-	{ "theHamsta/nvim-dap-virtual-text" },
+	{ "mfussenegger/nvim-dap", lazy = true },
+	{ "rcarriga/nvim-dap-ui", lazy = true },
+	{ "theHamsta/nvim-dap-virtual-text", lazy = true },
 })
