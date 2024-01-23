@@ -1,5 +1,3 @@
-local M = {}
-
 local kind = {
 	Text = "⊜",
 	Method = "⇒",
@@ -27,6 +25,15 @@ local kind = {
 	Operator = "±",
 	TypeParameter = "",
 }
+local cmp_sources = {
+	{ name = "nvim_lsp" },
+	{ name = "nvim_lsp_signature_help" },
+	{ name = "nvim_lua" },
+	{ name = "luasnip" },
+	{ name = "buffer" },
+	{ name = "path" },
+}
+
 local menu_icons = {
 	nvim_lsp = "λ",
 	luasnip = "",
@@ -34,49 +41,31 @@ local menu_icons = {
 	path = "",
 	nvim_lua = "",
 }
+return {
+	"hrsh7th/nvim-cmp",
+	event = "InsertEnter",
+	dependencies = {
+		"hrsh7th/cmp-nvim-lsp",
+		"hrsh7th/cmp-nvim-lua",
+		"hrsh7th/cmp-buffer",
+		"hrsh7th/cmp-path",
+		"hrsh7th/cmp-cmdline",
+		"hrsh7th/cmp-nvim-lsp-signature-help",
+		"saadparwaiz1/cmp_luasnip",
+		"L3MON4D3/LuaSnip",
+		"rafamadriz/friendly-snippets",
+	},
+	config = function()
+		local cmp = require("cmp")
+		local luasnip = require("luasnip")
+		require("luasnip.loaders.from_vscode").lazy_load()
 
-M.config = function()
-	-- CMP
-	local has_cmp, cmp = pcall(require, "cmp")
-	if has_cmp then
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
-		local cmp_sources = {
-			{ name = "nvim_lsp" },
-			{ name = "nvim_lsp_signature_help" },
-			{ name = "nvim_lua" },
-			{ name = "luasnip" },
-			{ name = "buffer" },
-			{ name = "path" },
-		}
 		local cmp_mappings = {
 			["<C-d>"] = cmp.mapping.scroll_docs(1),
 			["<C-u>"] = cmp.mapping.scroll_docs(-1),
 			["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
 			["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
-			["<S-Tab>"] = cmp.mapping(function(fallback)
-				local imported, luasnip = pcall(require, "luasnip")
-				if cmp.visible() then
-					cmp.mapping.abort()
-				end
-				if imported and luasnip.jumpable(-1) then
-					luasnip.jump(-1)
-				else
-					fallback()
-				end
-			end, { "i", "s" }),
-			["<Tab>"] = cmp.mapping(function(fallback)
-				local imported, luasnip = pcall(require, "luasnip")
-				if cmp.visible() then
-					cmp.mapping.abort()
-				end
-				if imported and luasnip.expandable() then
-					luasnip.expand()
-				elseif imported and luasnip.expand_or_jumpable() then
-					luasnip.expand_or_jump()
-				else
-					fallback()
-				end
-			end, { "i", "s" }),
 			["<C-x>"] = cmp.mapping.complete({
 				config = {
 					sources = cmp_sources,
@@ -89,7 +78,7 @@ M.config = function()
 			}),
 		}
 
-		local cmp_config = {
+		cmp.setup({
 			mapping = cmp_mappings,
 			sources = cmp_sources,
 			window = {
@@ -112,10 +101,7 @@ M.config = function()
 					require("luasnip").lsp_expand(args.body)
 				end,
 			},
-		}
-
-		vim.opt.completeopt = { "menu", "menuone", "noselect" }
-		cmp.setup(cmp_config)
+		})
 		-- `/` cmdline setup.
 		cmp.setup.cmdline("/", {
 			mapping = cmp_mappings,
@@ -136,7 +122,5 @@ M.config = function()
 				},
 			}),
 		})
-	end
-end
-
-return M
+	end,
+}

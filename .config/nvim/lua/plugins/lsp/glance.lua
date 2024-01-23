@@ -1,11 +1,9 @@
-local M = {}
-
-M.config = function()
-	-- UI
-	local has_glance, glance = pcall(require, "glance")
-	if has_glance then
+return {
+	"dnlhc/glance.nvim",
+	cmd = { "Glance" },
+	config = function()
+		local glance = require("glance")
 		local actions = glance.actions
-
 		glance.setup({
 			height = 22,
 			zindex = 45,
@@ -92,7 +90,5 @@ M.config = function()
 				end,
 			},
 		})
-	end
-end
-
-return M
+	end,
+}
