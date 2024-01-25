@@ -42,7 +42,6 @@ local function config()
 		["n"] = { "<cmd>nohlsearch<CR>", "No Search Highlight" },
 		["j"] = { "<cmd>bnext<CR>", "Next Buffer" },
 		["k"] = { "<cmd>bprevious<CR>", "Previous Buffer" },
-		["h"] = { "<cmd>ls<CR>", "List Buffers" },
 		["l"] = { "<C-^>", "Go to Last Buffers" },
 
 		p = {
