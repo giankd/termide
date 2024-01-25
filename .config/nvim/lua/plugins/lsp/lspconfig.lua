@@ -224,7 +224,6 @@ return {
 					name = "Code",
 					o = { "<cmd>Telescope lsp_workspace_symbols<CR>", "Outline" },
 					l = { vim.diagnostic.open_float, "Line Diagnostic" },
-					n = { vim.lsp.buf.rename, "Rename" },
 					t = { "<cmd>Telescope lsp_type_definitions<CR>", "Find Type Definitions" },
 					i = { "<cmd>Telescope lsp_implementations<CR>", "Find Implementations" },
 					D = { "<cmd>Telescope lsp_definitions<CR>", "Find Definitions" },

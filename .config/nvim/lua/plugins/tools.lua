@@ -76,8 +76,8 @@ return {
 				bottom_search = true, -- use a classic bottom cmdline for search
 				command_palette = true, -- position the cmdline and popupmenu together
 				long_message_to_split = true, -- long messages will be sent to a split
-				inc_rename = false, -- enables an input dialog for inc-rename.nvim
 				lsp_doc_border = false, -- add a border to hover docs and signature help
+				inc_rename = true, -- enables an input dialog for inc-rename.nvim
 			},
 		},
 		dependencies = {
@@ -101,9 +101,20 @@ return {
 		},
 	},
 	{
+	{
+		"smjonas/inc-rename.nvim",
 		dependencies = {
+			"folke/noice.nvim",
+			"folke/which-key.nvim",
 		},
+		event = { "BufReadPre *.*" },
+		cmd = { "IncRename" },
 		config = function()
+			local keymaps = require("giankd.modules.keymaps")
+			require("inc_rename").setup()
+			keymaps.nnoremap("<leader>cn", function()
+				return ":IncRename " .. vim.fn.expand("<cword>")
+			end, { expr = true })
 		end,
 	},
 }
