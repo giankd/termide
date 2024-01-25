@@ -78,6 +78,7 @@ local telescope_config = function()
 			},
 			f = { builtins.live_grep, "Live Grep" },
 			w = { builtins.current_buffer_fuzzy_find, "Current Buffer" },
+			t = { "<cmd>TodoTelescope<CR>", "TODOs" },
 		},
 	}
 	whichkey.register(keymaps, { silent = false, prefix = "<leader>" })
