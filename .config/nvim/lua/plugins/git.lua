@@ -48,7 +48,7 @@ local static_keymaps = {
 return {
 	{
 		"tpope/vim-fugitive",
-		cmd = { "Git", "GcLog" },
+		cmd = { "Git", "GcLog", "Gvdiffsplit", "G" },
 	},
 	{
 		"lewis6991/gitsigns.nvim",

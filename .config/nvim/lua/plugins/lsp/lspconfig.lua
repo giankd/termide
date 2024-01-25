@@ -191,6 +191,9 @@ return {
 		local cmp_lsp = require("cmp_nvim_lsp")
 		local wk = require("which-key")
 
+		-- debug lsp
+		-- vim.lsp.set_log_level(0) -- 0 => TRACE
+
 		-- Define servers configs
 		neodev.setup({
 			library = {
@@ -200,7 +203,6 @@ return {
 		local on_attach = function(client, bufnr)
 			vim.notify("Attaching " .. client.name, { type = "info", title = "LSP" })
 
-			local serverCapabilities = client.server_capabilities
 			local nnoremap = require("giankd.modules.keymaps").nnoremap
 
 			-- Keymaps
@@ -254,13 +256,9 @@ return {
 			wk.register(keymap_c_visual, { mode = "v", buffer = bufnr, prefix = "<leader>" })
 		end
 		local capabilities = cmp_lsp.default_capabilities()
-		capabilities.textDocument.foldingRange = {
-			dynamicRegistration = false,
-			lineFoldingOnly = true,
-		}
 
 		for server_name, server_config in pairs(server_configurations) do
-			lspconfig[server_name].setup(vim.tbl_extend("keep", server_config, {
+			lspconfig[server_name].setup(vim.tbl_extend("force", server_config, {
 				capabilities = capabilities,
 				on_attach = on_attach,
 			}))
@@ -285,6 +283,7 @@ return {
 				name = "LSP",
 				i = { "<cmd>LspInfo<CR>", "Lsp Info" },
 				r = { "<cmd>LspRestart<CR>", "Lsp Restart" },
+				l = { "<cmd>LspLog<CR>", "Lsp Log" },
 			},
 		}
 		wk.register(utils_keymap, { buffer = nil, prefix = "<leader>" })
