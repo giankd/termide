@@ -29,14 +29,15 @@ local server_configurations = {
 	},
 	-- cssls = {
 	-- 	settings = {
+	-- 		-- Using stylelint for validation, see lint.lua
 	-- 		css = {
-	-- 			validate = true,
+	-- 			validate = false,
 	-- 		},
 	-- 		less = {
-	-- 			validate = true,
+	-- 			validate = false,
 	-- 		},
 	-- 		scss = {
-	-- 			validate = true,
+	-- 			validate = false,
 	-- 		},
 	-- 	},
 	-- 	single_file_support = false,
