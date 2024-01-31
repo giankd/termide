@@ -27,21 +27,21 @@ local server_configurations = {
 	tsserver = {
 		single_file_support = false,
 	},
-	-- cssls = {
-	-- 	settings = {
-	-- 		-- Using stylelint for validation, see lint.lua
-	-- 		css = {
-	-- 			validate = false,
-	-- 		},
-	-- 		less = {
-	-- 			validate = false,
-	-- 		},
-	-- 		scss = {
-	-- 			validate = false,
-	-- 		},
-	-- 	},
-	-- 	single_file_support = false,
-	-- },
+	cssls = {
+		settings = {
+			-- Using stylelint for validation, see lint.lua
+			css = {
+				validate = false,
+			},
+			less = {
+				validate = false,
+			},
+			scss = {
+				validate = false,
+			},
+		},
+		single_file_support = false,
+	},
 	html = {
 		settings = {
 			init_options = {
