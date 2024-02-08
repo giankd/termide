@@ -29,15 +29,23 @@ local server_configurations = {
 	},
 	cssls = {
 		settings = {
-			-- Using stylelint for validation, see lint.lua
 			css = {
-				validate = false,
+				validate = true,
+				lint = {
+					unknownAtRules = "ignore",
+				},
 			},
 			less = {
-				validate = false,
+				validate = true,
+				lint = {
+					unknownAtRules = "ignore",
+				},
 			},
 			scss = {
-				validate = false,
+				validate = true,
+				lint = {
+					unknownAtRules = "ignore",
+				},
 			},
 		},
 		single_file_support = false,
@@ -172,6 +180,16 @@ local server_configurations = {
 					recommendedVariantOrder = "warning",
 				},
 				validate = true,
+			},
+		},
+	},
+	yamlls = {
+		settings = {
+			yaml = {
+				schemas = {
+					["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*", -- GitHub Workflow
+					["https://bitbucket.org/atlassianlabs/intellij-bitbucket-references-plugin/raw/HEAD/src/main/resources/schemas/bitbucket-pipelines.schema.json"] = "bitbucket-pipelines.*.yml", -- Bitbucket pipelines
+				},
 			},
 		},
 	},

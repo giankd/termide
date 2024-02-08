@@ -57,7 +57,7 @@ local telescope_config = function()
 	local keymaps = {
 		f = {
 			name = "Find",
-			F = {
+			l = {
 				function()
 					builtins.find_files({
 						find_command = { "rg", "--files", "--hidden", "-g", "!node_modules/**" },

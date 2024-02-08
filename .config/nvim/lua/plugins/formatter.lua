@@ -22,6 +22,7 @@ return {
 				python = { "isort", "black" },
 				["markdown"] = { { "prettierd", "prettier" } },
 				["markdown.mdx"] = { { "prettierd", "prettier" } },
+				["json"] = { { "prettierd", "prettier" } },
 				["javascript"] = { { "prettierd", "prettier", "dprint" } },
 				["javascriptreact"] = { { "prettierd", "prettier", "dprint" } },
 				["typescript"] = { { "prettierd", "prettier", "dprint" } },
