@@ -48,7 +48,6 @@ return {
 			m_lspconfig.setup({
 				ensure_installed = {
 					"tsserver",
-					"eslint",
 					"cssls",
 					"stylelint_lsp",
 					"tailwindcss",

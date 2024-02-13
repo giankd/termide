@@ -5,7 +5,6 @@ return {
 	config = function()
 		require("mason-nvim-lint").setup({
 			ensure_installed = {
-				-- "eslint_d",
 				"vale",
 				"codespell",
 				"gdtoolkit",
@@ -13,26 +12,22 @@ return {
 				"selene",
 				"stylelint",
 			},
-			automatic_installation = true,
+			automatic_installation = false,
 		})
 
 		require("lint").linters_by_ft = {
 			markdown = { "vale" },
 			javascript = {
 				"eslint",
-				-- "eslint_d",
 			},
 			typescript = {
 				"eslint",
-				-- "eslint_d",
 			},
 			javascriptreact = {
 				"eslint",
-				-- "eslint_d",
 			},
 			typescriptreact = {
 				"eslint",
-				-- "eslint_d",
 			},
 			json = {
 				"jsonlint",
