@@ -10,6 +10,30 @@ local telescope_config = function()
 					return { "--hidden" }
 				end,
 			},
+			spell_suggest = {
+				theme = "cursor",
+			},
+			current_buffer_fuzzy_find = {
+				theme = "dropdown",
+			},
+			diagnostics = {
+				theme = "dropdown",
+			},
+			git_branches = {
+				theme = "dropdown",
+			},
+			git_status = {
+				theme = "dropdown",
+			},
+			git_stash = {
+				theme = "dropdown",
+			},
+			git_commits = {
+				theme = "dropdown",
+			},
+			git_bcommits = {
+				theme = "dropdown",
+			},
 		},
 		defaults = {
 			path_display = { "smart" },
