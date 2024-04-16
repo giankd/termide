@@ -29,6 +29,7 @@ local cmp_sources = {
 	{ name = "nvim_lsp" },
 	{ name = "nvim_lsp_signature_help" },
 	{ name = "nvim_lua" },
+	{ name = "cmp-tw2css" },
 	{ name = "luasnip" },
 	{ name = "buffer" },
 	{ name = "path" },
@@ -36,6 +37,8 @@ local cmp_sources = {
 
 local menu_icons = {
 	nvim_lsp = "λ",
+	nvim_lsp_signature_help = "∫",
+	["cmp-tw2css"] = "✏",
 	luasnip = "",
 	buffer = "♽",
 	path = "",
@@ -54,11 +57,13 @@ return {
 		"saadparwaiz1/cmp_luasnip",
 		"L3MON4D3/LuaSnip",
 		"rafamadriz/friendly-snippets",
+		"jcha0713/cmp-tw2css",
 	},
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
 		require("luasnip.loaders.from_vscode").lazy_load()
+		require("cmp-tw2css").setup({ fallback = false })
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 		local cmp_mappings = {
