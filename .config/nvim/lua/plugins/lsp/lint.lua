@@ -11,6 +11,7 @@ return {
 				"jsonlint",
 				"selene",
 				"stylelint",
+				"eslint_d",
 			},
 			automatic_installation = false,
 		})
