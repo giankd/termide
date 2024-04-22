@@ -12,7 +12,7 @@ return {
 			local n_keymaps = {
 				S = {
 					name = "Search and Replace",
-					t = {
+					s = {
 						'<cmd>lua require("spectre").toggle()<CR>',
 						"Toggle Spectre",
 					},
