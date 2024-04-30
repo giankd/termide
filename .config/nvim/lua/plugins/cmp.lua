@@ -80,7 +80,7 @@ return {
             ["<CR>"] = cmp.mapping({
                 i = function(fallback)
                     if cmp.visible() then
-                        if luasnip.expandable() and cmp.get_active_entry() then
+                        if luasnip.expandable() and not cmp.get_active_entry() then
                             luasnip.expand()
                         else
                             cmp.confirm({
