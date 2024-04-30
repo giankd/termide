@@ -23,6 +23,12 @@ local load_default_groups = function()
 		pattern = "*",
 		command = "%s/\\s\\+$//e",
 	})
+
+	autocmd({ "VimEnter" }, {
+		group = GiankdGroup,
+		pattern = "*",
+		command = "tabdo windo clearjumps",
+	})
 end
 
 local load_default_config = function()
