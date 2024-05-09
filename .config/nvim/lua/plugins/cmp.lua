@@ -85,15 +85,15 @@ return {
                         else
                             cmp.confirm({
                                 behavior = cmp.ConfirmBehavior.Replace,
-                                select = true,
+                                select = false,
                             })
                         end
                     else
                         fallback()
                     end
                 end,
-                s = cmp.mapping.confirm({ select = true }),
-                c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                s = cmp.mapping.confirm({ select = false }),
+                c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
             }),
             ["<Tab>"] = cmp.mapping(function(fallback)
                 if cmp.visible() then
@@ -114,6 +114,50 @@ return {
                     fallback()
                 end
             end, { "i", "s" }),
+        }
+
+        local cmp_cli_mappings = {
+            ["<C-d>"] = cmp.mapping.scroll_docs(1),
+            ["<C-u>"] = cmp.mapping.scroll_docs(-1),
+            ["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
+            ["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
+            ["<C-x>"] = cmp.mapping.complete({
+                config = {
+                    sources = {
+                        { name = "buffer" },
+                    },
+                },
+            }),
+            ["<C-e>"] = cmp.mapping.abort(),
+            ["<CR>"] = cmp.mapping({
+                i = function(fallback)
+                    if cmp.visible() then
+                        cmp.confirm({
+                            behavior = cmp.ConfirmBehavior.Replace,
+                            select = false,
+                        })
+                    else
+                        fallback()
+                    end
+                end,
+                s = cmp.mapping.confirm({ select = false }),
+                c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+            }),
+            ["<Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_next_item()
+                else
+                    fallback()
+                end
+            end, { "i", "s", "c" }),
+
+            ["<S-Tab>"] = cmp.mapping(function(fallback)
+                if cmp.visible() then
+                    cmp.select_prev_item()
+                else
+                    fallback()
+                end
+            end, { "i", "s", "c" }),
         }
 
         cmp.setup({
@@ -141,15 +185,15 @@ return {
             },
         })
         -- `/` cmdline setup.
-        cmp.setup.cmdline("/", {
-            mapping = cmp.mapping.preset.cmdline(),
+        cmp.setup.cmdline({ "/", "?" }, {
+            mapping = cmp_cli_mappings,
             sources = {
                 { name = "buffer" },
             },
         })
         -- `:` cmdline setup.
         cmp.setup.cmdline(":", {
-            mapping = cmp.mapping.preset.cmdline(),
+            mapping = cmp_cli_mappings,
             sources = cmp.config.sources({
                 { name = "buffer" },
                 {
