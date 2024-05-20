@@ -1,4 +1,10 @@
 customCommands:
+  - key: 'F'
+    command: 'git fetch --prune'
+    context: 'global'
+    stream: true
+    loadingText: 'Fetching branches with cleanup'
+    description: 'Fetch branches pruning'
   - key: 'N'
     prompts:
       - type: 'menu'
