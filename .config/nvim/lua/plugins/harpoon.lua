@@ -8,7 +8,12 @@ return {
 	event = { "VeryLazy", "BufReadPre *.*" },
 	config = function()
 		local harpoon = require("harpoon")
-		harpoon:setup()
+		harpoon:setup({
+			settings = {
+				sync_on_ui_close = true,
+				save_on_toggle = true,
+			},
+		})
 
 		local hrp_mapping = {
 			["h"] = {
