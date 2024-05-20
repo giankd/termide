@@ -110,7 +110,99 @@ end
 
 return {
 	-- Netrw
-	{ "tpope/vim-vinegar", lazy = false },
+	-- { "tpope/vim-vinegar", lazy = false },
+	-- File explorer
+	{
+		"stevearc/oil.nvim",
+		lazy = false,
+		config = function()
+			local oil = require("oil")
+			oil.setup({
+				-- Skip the confirmation popup for simple operations (:help oil.skip_confirm_for_simple_edits)
+				skip_confirm_for_simple_edits = true,
+				-- Oil will automatically delete hidden buffers after this delay
+				-- You can set the delay to false to disable cleanup entirely
+				-- Note that the cleanup process only starts when none of the oil buffers are currently displayed
+				cleanup_delay_ms = 2000,
+				lsp_file_methods = {
+					-- Time to wait for LSP file operations to complete before skipping
+					timeout_ms = 1000,
+				},
+				keymaps = {
+					["g?"] = "actions.show_help",
+					["<CR>"] = "actions.select",
+					["<C-v>"] = "actions.select_vsplit",
+					["<C-h>"] = "actions.select_split",
+					["<C-t>"] = "actions.select_tab",
+					["<C-p>"] = "actions.preview",
+					["<C-q>"] = "actions.close",
+					["<C-l>"] = "actions.refresh",
+					["-"] = "actions.parent",
+					["_"] = "actions.open_cwd",
+					["`"] = "actions.cd",
+					["~"] = "actions.tcd",
+					["gs"] = "actions.change_sort",
+					["gx"] = "actions.open_external",
+					["g."] = "actions.toggle_hidden",
+					["g\\"] = "actions.toggle_trash",
+				},
+				use_default_keymaps = true,
+				view_options = {
+					-- Show files and directories that start with "."
+					show_hidden = true,
+					-- This function defines what is considered a "hidden" file
+					is_hidden_file = function(name, bufnr)
+						return vim.startswith(name, ".")
+					end,
+					-- Sort file names in a more intuitive order for humans. Is less performant,
+					-- so you may want to set to false if you work with large directories.
+					natural_order = true,
+					sort = {
+						-- sort order can be "asc" or "desc"
+						-- see :help oil-columns to see which columns are sortable
+						{ "type", "asc" },
+						{ "name", "asc" },
+					},
+				},
+				-- Extra arguments to pass to SCP when moving/copying files over SSH
+				extra_scp_args = {},
+				-- EXPERIMENTAL support for performing file operations with git
+				git = {
+					-- Return true to automatically git add/mv/rm files
+					add = function(path)
+						return false
+					end,
+					mv = function(src_path, dest_path)
+						return false
+					end,
+					rm = function(path)
+						return false
+					end,
+				},
+				-- Configuration for the floating progress window
+				progress = {
+					max_width = 0.9,
+					min_width = { 40, 0.4 },
+					width = nil,
+					max_height = { 10, 0.9 },
+					min_height = { 5, 0.1 },
+					height = nil,
+					border = "rounded",
+					minimized_border = "none",
+					win_options = {
+						winblend = 0,
+					},
+				},
+				-- Configuration for the floating keymaps help window
+				keymaps_help = {
+					border = "rounded",
+				},
+			})
+			local keymaps = require("giankd.modules.keymaps")
+			keymaps.nnoremap("-", "<cmd>Oil<CR>", { desc = "Open Oil (File Explorer)" })
+		end,
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
 	{
 		"nvim-telescope/telescope.nvim",
 		branch = "0.1.x",
