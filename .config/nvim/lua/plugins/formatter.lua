@@ -3,7 +3,7 @@ local ignore_filetypes = { "sql" }
 return {
 	{
 		"stevearc/conform.nvim",
-		event = { "BufWritePre" },
+		event = { "BufEnter *.*" },
 		dependencies = { "folke/which-key.nvim" },
 		cmd = { "ConformInfo" },
 		config = function()
@@ -80,7 +80,7 @@ return {
 								"Format on save "
 									.. (vim.g.disable_autoformat and "DISABLED" or "enabled")
 									.. "\nFormat on save this buffer "
-									.. (vim.b.disable_autoformat and "disabled" or "enabled")
+									.. (vim.b.disable_autoformat and "DISABLED" or "enabled")
 							)
 						end,
 						"Show format on save state",
