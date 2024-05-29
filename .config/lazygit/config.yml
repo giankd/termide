@@ -51,6 +51,15 @@ customCommands:
     context: "localBranches"
     loadingText: "Pruning..."
     description: "prune local branches that have been merged to master"
+  - key: "B"
+    context: "localBranches"
+    prompts:
+      - type: "input"
+        title: "From which branch you would prune?"
+        initialValue: "{{.SelectedLocalBranch.Name}}"
+        key: "PruneBranch"
+    command: git branch --merged {{.Form.PruneBranch}} | grep -v 'release\|dev\|main\|master' | xargs git branch -d
+    loadingText: "Pruning..."
   - key: "<c-p>"
     command: "git remote prune {{.SelectedRemote.Name}}"
     context: "remotes"
