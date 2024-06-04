@@ -165,7 +165,9 @@ local server_configurations = {
 			},
 		},
 	},
-	cssmodules_ls = {},
+	cssmodules_ls = {
+		autostart = false,
+	},
 	tailwindcss = {
 		settings = {
 			tailwindCSS = {
