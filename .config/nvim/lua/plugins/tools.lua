@@ -9,6 +9,19 @@ return {
 		},
 	},
 	{
+		"windwp/nvim-ts-autotag",
+		event = "InsertEnter",
+		config = function()
+			require("nvim-ts-autotag").setup({
+				opts = {
+					enable_close = true, -- Auto close tags
+					enable_rename = true, -- Auto rename pairs of tags
+					enable_close_on_slash = true, -- Auto close on trailing </
+				},
+			})
+		end,
+	},
+	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		dependencies = {
@@ -18,7 +31,6 @@ return {
 					enable = true,
 				},
 			},
-			"windwp/nvim-ts-autotag",
 		},
 		config = function()
 			require("nvim-treesitter.configs").setup({
@@ -43,10 +55,6 @@ return {
 				},
 				sync_install = false,
 				auto_install = true,
-
-				autotag = {
-					enable = true,
-				},
 				indent = {
 					enable = true,
 					disable = {},
