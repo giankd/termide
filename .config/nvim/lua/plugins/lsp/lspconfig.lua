@@ -253,7 +253,7 @@ return {
 					i = { "<cmd>Telescope lsp_implementations<CR>", "Find Implementations" },
 					D = { "<cmd>Telescope lsp_definitions<CR>", "Find Definitions" },
 					p = { vim.lsp.buf.declaration, "Find Declaration" },
-					d = { "<cmd>Telescope diagnostics bufnr=0<CR>", "Document Diagnostics" },
+					d = { "<cmd>Telescope diagnostics bufnr=0<CR>", "Document Diagnostics (Telescope)" },
 					a = { vim.lsp.buf.code_action, "Code Action" },
 					f = { "<cmd>Telescope lsp_references<CR>", "References" },
 				},
