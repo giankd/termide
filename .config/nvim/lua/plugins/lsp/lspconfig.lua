@@ -204,10 +204,20 @@ return {
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
 		"folke/which-key.nvim",
-		"folke/neodev.nvim",
+		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "luvit-meta/library", words = { "vim%.uv" } },
+				},
+			},
+		},
+		{ "Bilal2453/luvit-meta", ft = "lua", lazy = true },
 	},
 	config = function()
-		local neodev = require("neodev")
 		local lspconfig = require("lspconfig")
 		local cmp_lsp = require("cmp_nvim_lsp")
 		local wk = require("which-key")
@@ -216,11 +226,6 @@ return {
 		-- vim.lsp.set_log_level(0) -- 0 => TRACE
 
 		-- Define servers configs
-		neodev.setup({
-			library = {
-				enabled = true,
-			},
-		})
 		local on_attach = function(client, bufnr)
 			vim.notify("Attaching " .. client.name, { type = "info", title = "LSP" })
 
