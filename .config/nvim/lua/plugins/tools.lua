@@ -52,6 +52,7 @@ return {
 					"html",
 					"scss",
 					"css",
+					"regex",
 				},
 				sync_install = false,
 				auto_install = true,
