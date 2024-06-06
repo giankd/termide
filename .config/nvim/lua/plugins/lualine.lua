@@ -28,6 +28,10 @@ return {
 							sources = { "nvim_diagnostic", "nvim_lsp" },
 							symbols = { error = " ", warn = " ", info = " ", hint = " " },
 						},
+						{
+							require("noice").api.statusline.mode.get,
+							cond = require("noice").api.statusline.mode.has,
+						},
 						"filetype",
 					},
 					lualine_y = { "progress" },
