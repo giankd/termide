@@ -25,7 +25,12 @@ local server_configurations = {
 		},
 	},
 	tsserver = {
-		single_file_support = false,
+		settings = {
+			single_file_support = false,
+			init_options = {
+				hostInfo = "neovim",
+			},
+		},
 	},
 	cssls = {
 		settings = {
