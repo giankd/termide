@@ -15,6 +15,9 @@ return {
 					["markdown"] = { { "prettierd", "prettier" } },
 					["markdown.mdx"] = { { "prettierd", "prettier" } },
 					["json"] = { { "prettierd", "prettier" } },
+					["jsonc"] = { { "prettierd", "prettier" } },
+					["json5"] = { { "prettierd", "prettier" } },
+					["jsonnet"] = { { "prettierd", "prettier" } },
 					["javascript"] = { { "prettierd", "prettier", "dprint" } },
 					["javascriptreact"] = { { "prettierd", "prettier", "dprint" } },
 					["typescript"] = { { "prettierd", "prettier", "dprint" } },
@@ -85,8 +88,30 @@ return {
 						end,
 						"Show format on save state",
 					},
+					["I"] = {
+						"<cmd>ConformInfo<CR>",
+						"Show Info",
+					},
 				},
 			}, { prefix = "<leader>", mode = "n", noremap = true })
+			-- whichkey.register({
+			-- 	F = {
+			-- 		name = "Format",
+			-- 		["F"] = {
+			-- 			function()
+			-- 				local range = nil
+			-- 				local start_line = vim.api.nvim_buf_get_mark(0, "<")[1]
+			-- 				local end_line = vim.api.nvim_buf_get_mark(0, ">")[1]
+			-- 				range = {
+			-- 					start = { start_line, 0 },
+			-- 					["end"] = { end_line },
+			-- 				}
+			-- 				require("conform").format({ async = true, lsp_fallback = true, range = range })
+			-- 			end,
+			-- 			"Format selection",
+			-- 		},
+			-- 	},
+			-- }, { prefix = "<leader>", mode = "v", noremap = true })
 		end,
 	},
 }
