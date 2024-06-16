@@ -200,6 +200,7 @@ local server_configurations = {
 			},
 		},
 	},
+	rust_analyzer = {},
 	-- ADD MORE SERVER CONFIGS
 }
 
