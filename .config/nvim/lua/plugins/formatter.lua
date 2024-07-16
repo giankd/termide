@@ -56,62 +56,45 @@ return {
 				},
 			})
 			local whichkey = require("which-key")
-			whichkey.register({
-				F = {
-					name = "Format",
-					["F"] = {
-						function()
-							require("conform").format({ async = true, lsp_fallback = true })
-						end,
-						"Format buffer",
-					},
-					["t"] = {
-						function()
-							vim.b.disable_autoformat = not vim.b.disable_autoformat
-						end,
-						"Toggle format on save for this buffer",
-					},
-					["T"] = {
-						function()
-							vim.g.disable_autoformat = not vim.g.disable_autoformat
-						end,
-						"Toggle format on save for all buffers",
-					},
-					["i"] = {
-						function()
-							vim.notify(
-								"Format on save "
-									.. (vim.g.disable_autoformat and "DISABLED" or "enabled")
-									.. "\nFormat on save this buffer "
-									.. (vim.b.disable_autoformat and "DISABLED" or "enabled")
-							)
-						end,
-						"Show format on save state",
-					},
-					["I"] = {
-						"<cmd>ConformInfo<CR>",
-						"Show Info",
-					},
+			whichkey.add({
+				mode = "n",
+				noremap = true,
+				{ "<leader>F", group = "format" },
+				{
+					"<leader>FF",
+					function()
+						require("conform").format({ async = true, lsp_fallback = true })
+					end,
+					desc = "Format buffer",
 				},
-			}, { prefix = "<leader>", mode = "n", noremap = true })
-			-- whichkey.register({
-			-- 	F = {
-			-- 		name = "Format",
-			-- 		["F"] = {
-			-- 			function()
-			-- 				local range = nil
-			-- 				local start_line = vim.api.nvim_buf_get_mark(0, "<")[1]
-			-- 				local end_line = vim.api.nvim_buf_get_mark(0, ">")[1]
-			-- 				range = {
-			-- 					start = { start_line, 0 },
-			-- 					["end"] = { end_line },
-			-- 				}
-			-- 				require("conform").format({ async = true, lsp_fallback = true, range = range })
-			-- 			end,
-			-- 			"Format selection",
-			-- 		},
-			-- 	},
-			-- }, { prefix = "<leader>", mode = "v", noremap = true })
+				{
+					"<leader>Ft",
+					function()
+						vim.b.disable_autoformat = not vim.b.disable_autoformat
+					end,
+					desc = "Toggle format on save for this buffer",
+				},
+				{
+					"<leader>FT",
+					function()
+						vim.g.disable_autoformat = not vim.g.disable_autoformat
+					end,
+					desc = "Toggle format on save for all buffers",
+				},
+				{
+					"<leader>Fi",
+					function()
+						vim.notify(
+							"Format on save "
+								.. (vim.g.disable_autoformat and "DISABLED" or "enabled")
+								.. "\nFormat on save this buffer "
+								.. (vim.b.disable_autoformat and "DISABLED" or "enabled")
+						)
+					end,
+					desc = "Show format on save state",
+				},
+				{ "<leader>FI", "<cmd>ConformInfo<CR>", desc = "Show Info" },
+			})
 		end,
 	},
 }

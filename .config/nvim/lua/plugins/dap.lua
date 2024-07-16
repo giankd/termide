@@ -178,71 +178,81 @@ return {
 
 			local whichkey = require("which-key")
 
-			whichkey.register({
-				D = {
-					name = "Debug",
-					["b"] = {
-						function()
-							dap.toggle_breakpoint()
-						end,
-						"Toggle breakpoint",
-					},
-					["g"] = {
-						function()
-							dap.run_to_cursor()
-						end,
-						"Vai al cursore",
-					},
-					["?"] = {
-						function()
-							require("dapui").eval(nil, { enter = true })
-						end,
-						"Eval under cursor",
-					},
-					["c"] = {
-						function()
-							dap.continue()
-						end,
-						"Continue",
-					},
-					["i"] = {
-						function()
-							dap.step_into()
-						end,
-						"Into",
-					},
-					["o"] = {
-						function()
-							dap.step_over()
-						end,
-						"Over",
-					},
-					["O"] = {
-						function()
-							dap.step_out()
-						end,
-						"Out",
-					},
-					["B"] = {
-						function()
-							dap.step_back()
-						end,
-						"Back",
-					},
-					["R"] = {
-						function()
-							dap.restart()
-						end,
-						"Restart",
-					},
-					["q"] = {
-						function()
-							dap.terminate()
-						end,
-						"Restart",
-					},
+			whichkey.add({
+				mode = "n",
+				noremap = true,
+				{ "<leader>D", group = "debug" },
+				{
+					"<leader>Db",
+					function()
+						dap.toggle_breakpoint()
+					end,
+					desc = "Toggle breakpoint",
 				},
-			}, { prefix = "<leader>", mode = "n", noremap = true })
+				{
+					"<leader>Dg",
+					function()
+						dap.run_to_cursor()
+					end,
+					desc = "Vai al cursore",
+				},
+				{
+					"<leader>D?",
+					function()
+						require("dapui").eval(nil, { enter = true })
+					end,
+					desc = "Eval under cursor",
+				},
+				{
+					"<leader>Dc",
+					function()
+						dap.continue()
+					end,
+					desc = "Continue",
+				},
+				{
+					"<leader>Di",
+					function()
+						dap.step_into()
+					end,
+					desc = "Into",
+				},
+				{
+					"<leader>Do",
+					function()
+						dap.step_over()
+					end,
+					desc = "Over",
+				},
+				{
+					"<leader>DO",
+					function()
+						dap.step_out()
+					end,
+					desc = "Out",
+				},
+				{
+					"<leader>DB",
+					function()
+						dap.step_back()
+					end,
+					desc = "Back",
+				},
+				{
+					"<leader>DR",
+					function()
+						dap.restart()
+					end,
+					desc = "Restart",
+				},
+				{
+					"<leader>Dq",
+					function()
+						dap.terminate()
+					end,
+					desc = "Restart",
+				},
+			})
 
 			dap.listeners.before.attach.dapui_config = function()
 				ui.open()

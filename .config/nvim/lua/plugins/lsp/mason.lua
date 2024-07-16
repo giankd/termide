@@ -59,13 +59,7 @@ return {
 				},
 				automatic_installation = true,
 			})
-			local utils_keymap = {
-				L = {
-					name = "LSP",
-					m = { "<cmd>Mason<CR>", "Mason UI" },
-				},
-			}
-			whichkey.register(utils_keymap, { buffer = nil, prefix = "<leader>" })
+			whichkey.add({ "<leader>Lm", "<cmd>Mason<CR>", desc = "Mason UI" })
 		end,
 	},
 }

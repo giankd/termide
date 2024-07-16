@@ -25,35 +25,33 @@ local function diffCurrentLines()
 end
 
 local static_keymaps_signs = {
-	G = {
-		name = "Git",
-		["B"] = { "<cmd>Git blame<cr>", "Blame mode (Fugitive)" },
-		["l"] = { "<cmd>0GcLog<cr>", "Previous versions" },
-		["m"] = { "<cmd>G mergetool<cr>", "Merge Tool" },
-		["o"] = { "<cmd>Gvdiffsplit!<CR>", "Open Diff Tool" },
-		["c"] = {
-			name = "Conflicts",
-			["k"] = { "[c", "Previous conflict" },
-			["j"] = { "]c", "Next conflict" },
-			["c"] = { "dp", "Put" },
-			["h"] = { "<cmd>diffget //2<CR>", "Get from left" },
-			["l"] = { "<cmd>diffget //3<CR>", "Get from right" },
-			["s"] = { "<cmd>Gwrite!<CR>", "Resolve" },
-		},
-	},
+	mode = { "n" },
+	noremap = true,
+	{ "<leader>G", group = "git" },
+	{ "<leader>GB", "<cmd>Git blame<cr>", desc = "Blame mode (Fugitive)" },
+	{ "<leader>Gl", "<cmd>0GcLog<cr>", desc = "Previous versions" },
+	{ "<leader>Gm", "<cmd>G mergetool<cr>", desc = "Merge Tool" },
+	{ "<leader>Go", "<cmd>Gvdiffsplit!<CR>", desc = "Open Diff Tool" },
+	{ "<leader>Gc", group = "conflicts" },
+	{ "<leader>Gck", "[c", desc = "Previous conflict" },
+	{ "<leader>Gcj", "]c", desc = "Next conflict" },
+	{ "<leader>Gcc", "dp", desc = "Put" },
+	{ "<leader>Gch", "<cmd>diffget //2<CR>", desc = "Get from left" },
+	{ "<leader>Gcl", "<cmd>diffget //3<CR>", desc = "Get from right" },
+	{ "<leader>Gcs", "<cmd>Gwrite!<CR>", desc = "Resolve" },
 }
 
 local static_keymaps_diff = {
-	["d"] = {
-		name = "Diffview",
-		["b"] = { "<cmd>DiffviewFileHistory<CR>", "Current Branch" },
-		["f"] = { "<cmd>DiffviewFileHistory %<CR>", "Current File" },
-		["d"] = { "<cmd>DiffviewOpen<CR>", "Current changes" },
-		["o"] = { "<cmd>DiffviewOpen origin/main...HEAD<CR>", "Origin main" },
-		["l"] = { "<cmd>DiffviewOpen HEAD~1<CR>", "Last commit" },
-		["r"] = { "<cmd>DiffviewRefresh<CR>", "Refresh" },
-		["c"] = { "<cmd>DiffviewClose<CR>", "Close" },
-	},
+	mode = { "n" },
+	noremap = true,
+	{ "<leader>d", group = "diffview" },
+	{ "<leader>db", "<cmd>DiffviewFileHistory<CR>", desc = "Current Branch" },
+	{ "<leader>df", "<cmd>DiffviewFileHistory %<CR>", desc = "Current File" },
+	{ "<leader>dd", "<cmd>DiffviewOpen<CR>", desc = "Current changes" },
+	{ "<leader>do", "<cmd>DiffviewOpen origin/main...HEAD<CR>", desc = "Origin main" },
+	{ "<leader>dl", "<cmd>DiffviewOpen HEAD~1<CR>", desc = "Last commit" },
+	{ "<leader>dr", "<cmd>DiffviewRefresh<CR>", desc = "Refresh" },
+	{ "<leader>dc", "<cmd>DiffviewClose<CR>", desc = "Close" },
 }
 
 return {
@@ -67,7 +65,7 @@ return {
 		dependencies = { "folke/which-key.nvim" },
 		config = function()
 			local whichkey = require("which-key")
-			whichkey.register(static_keymaps_signs, { prefix = "<leader>", mode = "n", noremap = true })
+			whichkey.add(static_keymaps_signs)
 			require("gitsigns").setup({
 				signs = {
 					add = {
@@ -150,60 +148,60 @@ return {
 
 					-- Actions
 					local keymap_g_n = {
-						G = {
-							name = "Git",
-							["a"] = {
-								function()
-									gs.setqflist(0)
-								end,
-								"Current Buffer Changes",
-							},
-							["A"] = {
-								function()
-									gs.setqflist("all")
-								end,
-								"All Changes",
-							},
-							["S"] = { gs.stage_buffer, "Stage Buffer" },
-							["R"] = { gs.reset_buffer, "Reset Buffer" },
-							["u"] = { gs.undo_stage_hunk, "Unstage Hunk" },
-							["P"] = { gs.preview_hunk, "Preview Hunk" },
-							["p"] = { gs.preview_hunk_inline, "Preview Hunk" },
-							["b"] = {
-								function()
-									gs.blame_line({ full = true })
-								end,
-								"Blame Line (Signs)",
-							},
-							["d"] = { gs.diffthis, "Diff" },
-							["D"] = {
-								function()
-									gs.diffthis("~1", {
-										vertical = true,
-									})
-								end,
-								"Diff Last Commit",
-							},
-							["tb"] = { gs.toggle_current_line_blame, "Toggle Blame Line" },
-							["td"] = { gs.toggle_deleted, "Toggle Deleted" },
-							["tl"] = { gs.toggle_linehl, "Toggle Line HL" },
+						mode = { "n" },
+						noremap = true,
+						{ "<leader>G", group = "git" },
+						{
+							"<leader>Ga",
+							function()
+								gs.setqflist(0)
+							end,
+							desc = "Current Buffer Changes",
 						},
+						{
+							"<leader>GA",
+							function()
+								gs.setqflist("all")
+							end,
+							desc = "All Changes",
+						},
+						{ "<leader>GS", gs.stage_buffer, desc = "Stage Buffer" },
+						{ "<leader>GR", gs.reset_buffer, desc = "Reset Buffer" },
+						{ "<leader>Gu", gs.undo_stage_hunk, desc = "Unstage Hunk" },
+						{ "<leader>GP", gs.preview_hunk, desc = "Preview Hunk" },
+						{ "<leader>Gp", gs.preview_hunk_inline, desc = "Preview Hunk" },
+						{
+							"<leader>Gb",
+							function()
+								gs.blame_line({ full = true })
+							end,
+							desc = "Blame Line (Signs)",
+						},
+						{ "<leader>Gd", gs.diffthis, desc = "Diff" },
+						{
+							"<leader>GD",
+							function()
+								gs.diffthis("~1", {
+									vertical = true,
+								})
+							end,
+							desc = "Diff Last Commit",
+						},
+						{ "<leader>Gtb", gs.toggle_current_line_blame, desc = "Toggle Blame Line" },
+						{ "<leader>Gtd", gs.toggle_deleted, desc = "Toggle Deleted" },
+						{ "<leader>Gtl", gs.toggle_linehl, desc = "Toggle Line HL" },
 					}
 
 					local keymap_g_v = {
-						G = {
-							name = "Git",
-							["s"] = { "<cmd>Gitsigns stage_hunk<CR>", "Stage Hunk" },
-							["r"] = { "<cmd>Gitsigns reset_hunk<CR>", "Reset Hunk" },
-							["l"] = { diffCurrentLines, "Previous Versions" },
-						},
+						mode = { "v" },
+						noremap = true,
+						{ "<leader>Gs", "<cmd>Gitsigns stage_hunk<CR>", desc = "Stage Hunk" },
+						{ "<leader>Gr", "<cmd>Gitsigns reset_hunk<CR>", desc = "Reset Hunk" },
+						{ "<leader>Gl", diffCurrentLines, desc = "Previous Versions" },
 					}
 
-					local wk_opts_n = { buffer = bufnr, prefix = "<leader>", mode = "n", noremap = true }
-					local wk_opts_v = { buffer = bufnr, prefix = "<leader>", mode = "v", noremap = true }
-
-					whichkey.register(keymap_g_n, wk_opts_n)
-					whichkey.register(keymap_g_v, wk_opts_v)
+					whichkey.add(keymap_g_n)
+					whichkey.add(keymap_g_v)
 
 					-- Text object
 					xnoremap("iG", ":<C-U>Gitsigns select_hunk<CR>")
@@ -217,7 +215,7 @@ return {
 		event = { "VeryLazy" },
 		config = function()
 			local whichkey = require("which-key")
-			whichkey.register(static_keymaps_diff, { prefix = "<leader>", mode = "n", noremap = true })
+			whichkey.add(static_keymaps_diff)
 			require("diffview").setup({
 				hooks = {
 					view_opened = function(view)

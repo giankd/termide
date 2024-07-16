@@ -251,40 +251,33 @@ return {
 			)
 
 			local keymap_c = {
-				c = {
-					name = "Code",
-					o = { "<cmd>Telescope lsp_workspace_symbols<CR>", "Outline" },
-					l = { vim.diagnostic.open_float, "Line Diagnostic" },
-					t = { "<cmd>Telescope lsp_type_definitions<CR>", "Find Type Definitions" },
-					i = { "<cmd>Telescope lsp_implementations<CR>", "Find Implementations" },
-					D = { "<cmd>Telescope lsp_definitions<CR>", "Find Definitions" },
-					p = { vim.lsp.buf.declaration, "Find Declaration" },
-					d = { "<cmd>Telescope diagnostics bufnr=0<CR>", "Document Diagnostics (Telescope)" },
-					a = { vim.lsp.buf.code_action, "Code Action" },
-					f = { "<cmd>Telescope lsp_references<CR>", "References" },
-				},
+				{ "<leader>c", group = "code" },
+				{ "<leader>co", "<cmd>Telescope lsp_workspace_symbols<CR>", desc = "Outline" },
+				{ "<leader>cl", vim.diagnostic.open_float, desc = "Line Diagnostic" },
+				{ "<leader>ct", "<cmd>Telescope lsp_type_definitions<CR>", desc = "Find Type Definitions" },
+				{ "<leader>ci", "<cmd>Telescope lsp_implementations<CR>", desc = "Find Implementations" },
+				{ "<leader>cD", "<cmd>Telescope lsp_definitions<CR>", desc = "Find Definitions" },
+				{ "<leader>cp", vim.lsp.buf.declaration, desc = "Find Declaration" },
+				{ "<leader>cd", "<cmd>Telescope diagnostics bufnr=0<CR>", "Document Diagnostics (Telescope)" },
+				{ "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
+				{ "<leader>cf", "<cmd>Telescope lsp_references<CR>", desc = "References" },
 			}
 
 			local keymap_c_visual = {
-				c = {
-					name = "Code",
-					a = { vim.lsp.buf.code_action, "Code Action" },
-				},
+				{ "<leader>ca", vim.lsp.buf.code_action, "Code Action", mode = "v" },
 			}
 
 			local keymap_g = {
-				g = {
-					name = "Go To",
-					d = { "<cmd>Glance definitions<CR>", "Definitions" },
-					r = { "<cmd>Glance references<CR>", "References" },
-					t = { "<cmd>Glance type_definitions<CR>", "Type Definition" },
-					i = { "<cmd>Glance implementations<CR>", "Implementations" },
-				},
+				{ "<leader>g", group = "goto" },
+				{ "<leader>gd", "<cmd>Glance definitions<CR>", desc = "Definitions" },
+				{ "<leader>gr", "<cmd>Glance references<CR>", desc = "References" },
+				{ "<leader>gt", "<cmd>Glance type_definitions<CR>", desc = "Type Definition" },
+				{ "<leader>gi", "<cmd>Glance implementations<CR>", desc = "Implementations" },
 			}
 
-			wk.register(keymap_c, { buffer = bufnr, prefix = "<leader>" })
-			wk.register(keymap_g, { buffer = bufnr, prefix = "<leader>" })
-			wk.register(keymap_c_visual, { mode = "v", buffer = bufnr, prefix = "<leader>" })
+			wk.add(keymap_c)
+			wk.add(keymap_g)
+			wk.add(keymap_c_visual)
 		end
 		local capabilities = cmp_lsp.default_capabilities()
 
@@ -310,13 +303,11 @@ return {
 
 		-- Define global keymaps
 		local utils_keymap = {
-			L = {
-				name = "LSP",
-				i = { "<cmd>LspInfo<CR>", "Lsp Info" },
-				r = { "<cmd>LspRestart<CR>", "Lsp Restart" },
-				l = { "<cmd>LspLog<CR>", "Lsp Log" },
-			},
+			{ "<leader>L", group = "lsp" },
+			{ "<leader>Li", "<cmd>LspInfo<CR>", desc = "Lsp Info" },
+			{ "<leader>Lr", "<cmd>LspRestart<CR>", desc = "Lsp Restart" },
+			{ "<leader>Ll", "<cmd>LspLog<CR>", desc = "Lsp Log" },
 		}
-		wk.register(utils_keymap, { buffer = nil, prefix = "<leader>" })
+		wk.add(utils_keymap)
 	end,
 }

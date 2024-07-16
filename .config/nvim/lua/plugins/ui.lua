@@ -79,33 +79,31 @@ local telescope_config = function()
 	end
 
 	local keymaps = {
-		f = {
-			name = "Find",
-			l = {
-				function()
-					builtins.find_files({
-						find_command = { "rg", "--files", "--hidden", "-g", "!node_modules/**" },
-					})
-				end,
-				"Browse All Files",
-			},
-			p = { builtins.git_files, "Git Files" },
-			q = { builtins.quickfix, "QuickFix Elements" },
-			s = { builtins.spell_suggest, "Spell Suggestions" },
-			g = {
-				name = "Git",
-				b = { builtins.git_branches, "Branches" },
-				s = { builtins.git_status, "Status" },
-				S = { builtins.git_stash, "Stashes" },
-				c = { builtins.git_commits, "Commits" },
-				d = { builtins.git_bcommits, "Diff Commits" },
-			},
-			f = { builtins.live_grep, "Live Grep" },
-			w = { builtins.current_buffer_fuzzy_find, "Current Buffer" },
-			t = { "<cmd>TodoTelescope<CR>", "TODOs" },
+		silent = false,
+		{ "<leader>f", group = "find" },
+		{
+			"<leader>fl",
+			function()
+				builtins.find_files({
+					find_command = { "rg", "--files", "--hidden", "-g", "!node_modules/**" },
+				})
+			end,
+			desc = "Browse All Files",
 		},
+		{ "<leader>fp", builtins.git_files, desc = "Git Files" },
+		{ "<leader>fq", builtins.quickfix, desc = "QuickFix Elements" },
+		{ "<leader>fs", builtins.spell_suggest, desc = "Spell Suggestions" },
+		{ "<leader>fg", group = "find_git" },
+		{ "<leader>fgb", builtins.git_branches, desc = "Branches" },
+		{ "<leader>fgs", builtins.git_status, desc = "Status" },
+		{ "<leader>fgS", builtins.git_stash, desc = "Stashes" },
+		{ "<leader>fgc", builtins.git_commits, desc = "Commits" },
+		{ "<leader>fgd", builtins.git_bcommits, desc = "Diff Commits" },
+		{ "<leader>ff", builtins.live_grep, desc = "Live Grep" },
+		{ "<leader>fw", builtins.current_buffer_fuzzy_find, desc = "Current Buffer" },
+		{ "<leader>ft", "<cmd>TodoTelescope<CR>", desc = "TODOs" },
 	}
-	whichkey.register(keymaps, { silent = false, prefix = "<leader>" })
+	whichkey.add(keymaps)
 end
 
 return {

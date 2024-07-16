@@ -16,40 +16,40 @@ return {
 		})
 
 		local hrp_mapping = {
-			["h"] = {
-				name = "Harpoon",
-				h = {
-					function()
-						harpoon:list():add()
-					end,
-					"Add Mark",
-				},
-				f = {
-					function()
-						harpoon.ui:toggle_quick_menu(harpoon:list())
-					end,
-					"See all Marks",
-				},
-				j = {
-					function()
-						harpoon:list():next()
-					end,
-					"Next Mark",
-				},
-				k = {
-					function()
-						harpoon:list():prev()
-					end,
-					"Prev Mark",
-				},
+			mode = { "n" },
+			noremap = true, -- use `noremap` when creating keymaps
+			nowait = false, -- use `nowait` when creating keymaps
+			{ "<leader>h", group = "harpoon" },
+			{
+				"<leader>hh",
+				function()
+					harpoon:list():add()
+				end,
+				desc = "Add Mark",
+			},
+			{
+				"<leaderhf",
+				function()
+					harpoon.ui:toggle_quick_menu(harpoon:list())
+				end,
+				desc = "See all Marks",
+			},
+			{
+				"<leader>hj",
+				function()
+					harpoon:list():next()
+				end,
+				desc = "Next Mark",
+			},
+			{
+				"<leader>hk",
+				function()
+					harpoon:list():prev()
+				end,
+				desc = "Prev Mark",
 			},
 		}
 		local wk = require("which-key")
-		wk.register(hrp_mapping, {
-			mode = "n", -- Normal mode
-			prefix = "<leader>",
-			noremap = true, -- use `noremap` when creating keymaps
-			nowait = false, -- use `nowait` when creating keymaps
-		})
+		wk.add(hrp_mapping)
 	end,
 }

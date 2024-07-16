@@ -1,118 +1,76 @@
-local function config()
-	local whichkey = require("which-key")
+local conf = {
+	preset = "modern",
+	win = {
+		border = "single", -- none, single, double, shadow
+	},
+}
 
-	local conf = {
-		ignore_missing = true,
-		spelling = {
-			enabled = true,
-			suggestions = 10,
-		},
-		window = {
-			border = "single", -- none, single, double, shadow
-			position = "bottom", -- bottom, top
-		},
-	}
+local mappings = {
+	{ "<leader>s", "<cmd>update!<CR>", desc = "Save" },
+	{ "<leader>q", "<cmd>q<CR>", desc = "Quit" },
+	{ "<leader>w", "<cmd>bd<CR>", desc = "Close" },
+	{ "<leader>Q", "<cmd>q!<CR>", desc = "Force Quit" },
+	{ "<leader>W", "<cmd>bd!<CR>", desc = "Force Close" },
+	{ "<leader>n", "<cmd>nohlsearch<CR>", desc = "No Search Highlight" },
+	{ "<leader>j", "<cmd>bnext<CR>", desc = "Next Buffer" },
+	{ "<leader>k", "<cmd>bprevious<CR>", desc = "Previous Buffer" },
+	{ "<leader>l", "<C-^>", desc = "Go to Last Buffers" },
 
-	local isOpen = false
-	local function toggle_qflist()
-		if isOpen then
-			vim.cmd({ cmd = "cclose" })
-			isOpen = false
-		else
-			vim.cmd({ cmd = "copen" })
-			isOpen = true
-		end
-	end
+	{ "<leader>p", group = "project" },
+	{ "<leader>pv", "<Cmd>Vex<CR>", desc = "Split Project Folder" },
+	{ "<leader>po", "<Cmd>Explore<CR>", desc = "Open Project Folder" },
 
-	local opts = {
-		mode = "n", -- Normal mode
-		prefix = "<leader>",
-		buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-		silent = true, -- use `silent` when creating keymaps
-		noremap = true, -- use `noremap` when creating keymaps
-		nowait = false, -- use `nowait` when creating keymaps
-	}
+	{ "<leader>b", group = "buffer" },
+	{ "<leader>bQ", "<cmd>%bd|e#|bd#<CR>", desc = "Delete all buffers" },
+	{ "<leader>bl", "<cmd>Telescope buffers<CR>", desc = "Show open buffers" },
+	{ "<leader>bL", "<cmd>buffers<CR>", desc = "List buffers" },
+	{ "<leader>bc", "<cmd>TSContextToggle<CR>", desc = "Toggle Context" },
 
-	local mappings = {
-		["s"] = { "<cmd>update!<CR>", "Save" },
-		["q"] = { "<cmd>q<CR>", "Quit" },
-		["w"] = { "<cmd>bd<CR>", "Close" },
-		["Q"] = { "<cmd>q!<CR>", "Force Quit" },
-		["W"] = { "<cmd>bd!<CR>", "Force Close" },
-		["n"] = { "<cmd>nohlsearch<CR>", "No Search Highlight" },
-		["j"] = { "<cmd>bnext<CR>", "Next Buffer" },
-		["k"] = { "<cmd>bprevious<CR>", "Previous Buffer" },
-		["l"] = { "<C-^>", "Go to Last Buffers" },
+	{ "<leader>t", group = "tabs" },
+	{ "<leader>tq", "<cmd>tabonly<Cr>", desc = "Delete all tabs" },
+	{ "<leader>tw", "<cmd>tabclose<Cr>", desc = "Close current tab" },
+	{ "<leader>tl", "<cmd>tabs<CR>", desc = "List tabs" },
+	{ "<leader>tj", "<cmd>tabnext<CR>", desc = "Next tab" },
+	{ "<leader>tk", "<cmd>tabprevious<CR>", desc = "Prev tab" },
+	{ "<leader>tn", "<cmd>tabnew<CR>", desc = "New empty tab" },
+	{ "<leader>te", "<cmd>tabfind<CR>", desc = "Open file in new tab" },
 
-		p = {
-			name = "Project",
-			v = { "<Cmd>Vex<CR>", "Split Project Folder" },
-			o = { "<Cmd>Explore<CR>", "Open Project Folder" },
-		},
+	{ "<leader>v", group = "window" },
+	{ "<leader>vv", "<cmd>vsplit<CR>", desc = "Vertical Split" },
+	{ "<leader>vs", "<cmd>split<CR>", desc = "Horizontal Split" },
+	{ "<leader>vh", "<C-w><", desc = "Decrease width" },
+	{ "<leader>vl", "<C-w>>", desc = "Increase width" },
+	{ "<leader>vL", "<C-w>|", desc = "Maximize width" },
+	{ "<leader>vk", "<C-w>+", desc = "Decrease height" },
+	{ "<leader>vj", "<C-w>-", desc = "Increase height" },
+	{ "<leader>vJ", "<C-w>_", desc = "Maximize height" },
 
-		b = {
-			name = "Buffer",
-			Q = { "<cmd>%bd|e#|bd#<CR>", "Delete all buffers" },
-			l = { "<cmd>Telescope buffers<CR>", "Show open buffers" },
-			L = { "<cmd>buffers<CR>", "List buffers" },
-			c = { "<cmd>TSContextToggle<CR>", "Toggle Context" },
-		},
+	{ "<leader>z", group = "lazy" },
+	{ "<leader>zc", "<cmd>Lazy clean<cr>", desc = "Clean" },
+	{ "<leader>zi", "<cmd>Lazy install<cr>", desc = "Install" },
+	{ "<leader>zS", "<cmd>Lazy sync<cr>", desc = "Sync" },
+	{ "<leader>zs", "<cmd>Lazy check<cr>", desc = "Check" },
+	{ "<leader>zu", "<cmd>Lazy update<cr>", desc = "Update" },
+	{ "<leader>zh", "<cmd>Lazy home<cr>", desc = "Home" },
+	{ "<leader>zH", "<cmd>Lazy help<cr>", desc = "Help" },
 
-		t = {
-			name = "Tabs",
-			q = { "<cmd>tabonly<Cr>", "Delete all tabs" },
-			w = { "<cmd>tabclose<Cr>", "Close current tab" },
-			l = { "<cmd>tabs<CR>", "List tabs" },
-			j = { "<cmd>tabnext<CR>", "Next tab" },
-			k = { "<cmd>tabprevious<CR>", "Prev tab" },
-			n = { "<cmd>tabnew<CR>", "New empty tab" },
-			e = { "<cmd>tabfind<CR>", "Open file in new tab" },
-		},
-
-		v = {
-			name = "Window",
-			v = { "<cmd>vsplit<CR>", "Vertical Split" },
-			s = { "<cmd>split<CR>", "Horizontal Split" },
-			h = { "<C-w><", "Decrease width" },
-			l = { "<C-w>>", "Increase width" },
-			L = { "<C-w>|", "Maximize width" },
-			k = { "<C-w>+", "Decrease height" },
-			j = { "<C-w>-", "Increase height" },
-			J = { "<C-w>_", "Maximize height" },
-		},
-
-		z = {
-			name = "Lazy",
-			c = { "<cmd>Lazy clean<cr>", "Clean" },
-			i = { "<cmd>Lazy install<cr>", "Install" },
-			S = { "<cmd>Lazy sync<cr>", "Sync" },
-			s = { "<cmd>Lazy check<cr>", "Check" },
-			u = { "<cmd>Lazy update<cr>", "Update" },
-			h = { "<cmd>Lazy home<cr>", "Home" },
-			H = { "<cmd>Lazy help<cr>", "Help" },
-		},
-
-		x = {
-			name = "QuickFixList",
-			x = { toggle_qflist, "Toggle" },
-			j = { "<cmd>cnext<CR>", "Next" },
-			k = { "<cmd>cprevious<CR>", "Prev" },
-			c = { "<cmd>call setqflist([])<CR>", "Clear" },
-		},
-	}
-
-	whichkey.setup(conf)
-	whichkey.register(mappings, opts)
-end
+	{ "<leader>x", desc = "Quickfix" },
+	{ "<leader>xx", "<cmd>copen<CR>", desc = "Open" },
+	{ "<leader>xX", "<cmd>cll<CR>", desc = "Close" },
+	{ "<leader>xj", "<cmd>cnext<CR>", desc = "Next" },
+	{ "<leader>xk", "<cmd>cprevious<CR>", desc = "Prev" },
+	{ "<leader>xc", "<cmd>call setqflist([])<CR>", desc = "Clear" },
+}
 
 return {
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
-		init = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 300
-		end,
-		config = config,
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+			{ "echasnovski/mini.nvim", version = false },
+		},
+		opts = conf,
+		keys = mappings,
 	},
 }

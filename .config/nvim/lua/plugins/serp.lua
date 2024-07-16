@@ -10,33 +10,32 @@ return {
 		local ok, wk = pcall(require, "which-key")
 		if ok then
 			local n_keymaps = {
-				S = {
-					name = "Search and Replace",
-					s = {
-						'<cmd>lua require("spectre").toggle()<CR>',
-						"Toggle Spectre",
-					},
-					w = {
-						'<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
-						"Search current word",
-					},
-					p = {
-						'<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
-						"Search on current file",
-					},
+				mode = { "n" },
+				silent = true,
+				{ "<leader>S", group = "serp" },
+				{ "<leader>Ss", '<cmd>lua require("spectre").toggle()<CR>', desc = "Toggle Spectre" },
+				{
+					"<leader>Sw",
+					'<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
+					desc = "Search current word",
+				},
+				{
+					"<leader>Sp",
+					'<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
+					desc = "Search on current file",
 				},
 			}
 			local v_keymaps = {
-				S = {
-					name = "Search and Replace",
-					w = {
-						'<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
-						"Search current word",
-					},
+				mode = "v",
+				silent = true,
+				{
+					"<leader>Sw",
+					'<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
+					desc = "Search current word",
 				},
 			}
-			wk.register(n_keymaps, { silent = true, mode = "n" })
-			wk.register(v_keymaps, { silent = true, mode = "v" })
+			wk.add(n_keymaps)
+			wk.add(v_keymaps)
 		else
 			vim.notify("Unable to require WK")
 		end
