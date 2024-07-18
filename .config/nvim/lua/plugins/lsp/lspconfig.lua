@@ -234,51 +234,51 @@ return {
 		-- Define servers configs
 		local on_attach = function(client, bufnr)
 			vim.notify("Attaching " .. client.name, { type = "info", title = "LSP" })
-
-			local nnoremap = require("giankd.modules.keymaps").nnoremap
-
-			-- Keymaps
-			nnoremap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
-			nnoremap("[d", "<cmd>lua vim.diagnostic.goto_prev({ float = true })<CR>")
-			nnoremap(
-				"[e",
-				"<cmd>lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR , float = true })<CR>"
-			)
-			nnoremap("]d", "<cmd>lua vim.diagnostic.goto_next({ float = true })<CR>")
-			nnoremap(
-				"]e",
-				"<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR , float = true })<CR>"
-			)
-
-			local keymap_c = {
-				{ "<leader>c", group = "code" },
-				{ "<leader>co", "<cmd>Telescope lsp_workspace_symbols<CR>", desc = "Outline" },
-				{ "<leader>cl", vim.diagnostic.open_float, desc = "Line Diagnostic" },
-				{ "<leader>ct", "<cmd>Telescope lsp_type_definitions<CR>", desc = "Find Type Definitions" },
-				{ "<leader>ci", "<cmd>Telescope lsp_implementations<CR>", desc = "Find Implementations" },
-				{ "<leader>cD", "<cmd>Telescope lsp_definitions<CR>", desc = "Find Definitions" },
-				{ "<leader>cp", vim.lsp.buf.declaration, desc = "Find Declaration" },
-				{ "<leader>cd", "<cmd>Telescope diagnostics bufnr=0<CR>", "Document Diagnostics (Telescope)" },
-				{ "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
-				{ "<leader>cf", "<cmd>Telescope lsp_references<CR>", desc = "References" },
-			}
-
-			local keymap_c_visual = {
-				{ "<leader>ca", vim.lsp.buf.code_action, "Code Action", mode = "v" },
-			}
-
-			local keymap_g = {
-				{ "<leader>g", group = "goto" },
-				{ "<leader>gd", "<cmd>Glance definitions<CR>", desc = "Definitions" },
-				{ "<leader>gr", "<cmd>Glance references<CR>", desc = "References" },
-				{ "<leader>gt", "<cmd>Glance type_definitions<CR>", desc = "Type Definition" },
-				{ "<leader>gi", "<cmd>Glance implementations<CR>", desc = "Implementations" },
-			}
-
-			wk.add(keymap_c)
-			wk.add(keymap_g)
-			wk.add(keymap_c_visual)
 		end
+
+		local nnoremap = require("giankd.modules.keymaps").nnoremap
+
+		-- Keymaps
+		nnoremap("K", "<cmd>lua vim.lsp.buf.hover()<CR>")
+		nnoremap("[d", "<cmd>lua vim.diagnostic.goto_prev({ float = true })<CR>")
+		nnoremap(
+			"[e",
+			"<cmd>lua vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR , float = true })<CR>"
+		)
+		nnoremap("]d", "<cmd>lua vim.diagnostic.goto_next({ float = true })<CR>")
+		nnoremap(
+			"]e",
+			"<cmd>lua vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR , float = true })<CR>"
+		)
+
+		local keymap_c = {
+			{ "<leader>c", group = "code" },
+			{ "<leader>co", "<cmd>Telescope lsp_workspace_symbols<CR>", desc = "Outline" },
+			{ "<leader>cl", vim.diagnostic.open_float, desc = "Line Diagnostic" },
+			{ "<leader>ct", "<cmd>Telescope lsp_type_definitions<CR>", desc = "Find Type Definitions" },
+			{ "<leader>ci", "<cmd>Telescope lsp_implementations<CR>", desc = "Find Implementations" },
+			{ "<leader>cD", "<cmd>Telescope lsp_definitions<CR>", desc = "Find Definitions" },
+			{ "<leader>cp", vim.lsp.buf.declaration, desc = "Find Declaration" },
+			{ "<leader>cd", "<cmd>Telescope diagnostics bufnr=0<CR>", desc = "Document Diagnostics (Telescope)" },
+			{ "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action" },
+			{ "<leader>cf", "<cmd>Telescope lsp_references<CR>", desc = "References" },
+		}
+
+		local keymap_c_visual = {
+			{ "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = "v" },
+		}
+
+		local keymap_g = {
+			{ "<leader>g", group = "goto" },
+			{ "<leader>gd", "<cmd>Glance definitions<CR>", desc = "Definitions" },
+			{ "<leader>gr", "<cmd>Glance references<CR>", desc = "References" },
+			{ "<leader>gt", "<cmd>Glance type_definitions<CR>", desc = "Type Definition" },
+			{ "<leader>gi", "<cmd>Glance implementations<CR>", desc = "Implementations" },
+		}
+
+		wk.add(keymap_c)
+		wk.add(keymap_g)
+		wk.add(keymap_c_visual)
 		local capabilities = cmp_lsp.default_capabilities()
 
 		for server_name, server_config in pairs(server_configurations) do

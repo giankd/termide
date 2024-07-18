@@ -28,7 +28,7 @@ return {
 				desc = "Add Mark",
 			},
 			{
-				"<leaderhf",
+				"<leader>hf",
 				function()
 					harpoon.ui:toggle_quick_menu(harpoon:list())
 				end,

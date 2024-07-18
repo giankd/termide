@@ -66,6 +66,88 @@ return {
 		config = function()
 			local whichkey = require("which-key")
 			whichkey.add(static_keymaps_signs)
+			local gs = require("gitsigns")
+
+			-- Navigation
+			nmap("]g", function()
+				if vim.wo.diff then
+					return "]g"
+				end
+				vim.schedule(function()
+					gs.next_hunk()
+				end)
+				return "<Ignore>"
+			end, { expr = true })
+
+			nmap("[g", function()
+				if vim.wo.diff then
+					return "[g"
+				end
+				vim.schedule(function()
+					gs.prev_hunk()
+				end)
+				return "<Ignore>"
+			end, { expr = true })
+
+			-- Actions
+			local keymap_g_n = {
+				mode = { "n" },
+				noremap = true,
+				{
+					"<leader>Ga",
+					function()
+						gs.setqflist(0)
+					end,
+					desc = "Current Buffer Changes",
+				},
+				{
+					"<leader>GA",
+					function()
+						gs.setqflist("all")
+					end,
+					desc = "All Changes",
+				},
+				{ "<leader>GS", gs.stage_buffer, desc = "Stage Buffer" },
+				{ "<leader>GR", gs.reset_buffer, desc = "Reset Buffer" },
+				{ "<leader>Gu", gs.undo_stage_hunk, desc = "Unstage Hunk" },
+				{ "<leader>GP", gs.preview_hunk, desc = "Preview Hunk" },
+				{ "<leader>Gp", gs.preview_hunk_inline, desc = "Preview Hunk" },
+				{
+					"<leader>Gb",
+					function()
+						gs.blame_line({ full = true })
+					end,
+					desc = "Blame Line (Signs)",
+				},
+				{ "<leader>Gd", gs.diffthis, desc = "Diff" },
+				{
+					"<leader>GD",
+					function()
+						gs.diffthis("~1", {
+							vertical = true,
+						})
+					end,
+					desc = "Diff Last Commit",
+				},
+				{ "<leader>Gtb", gs.toggle_current_line_blame, desc = "Toggle Blame Line" },
+				{ "<leader>Gtd", gs.toggle_deleted, desc = "Toggle Deleted" },
+				{ "<leader>Gtl", gs.toggle_linehl, desc = "Toggle Line HL" },
+			}
+
+			local keymap_g_v = {
+				mode = { "v" },
+				noremap = true,
+				{ "<leader>Gs", "<cmd>Gitsigns stage_hunk<CR>", desc = "Stage Hunk" },
+				{ "<leader>Gr", "<cmd>Gitsigns reset_hunk<CR>", desc = "Reset Hunk" },
+				{ "<leader>Gl", diffCurrentLines, desc = "Previous Versions" },
+			}
+
+			whichkey.add(keymap_g_n)
+			whichkey.add(keymap_g_v)
+
+			-- Text object
+			xnoremap("iG", ":<C-U>Gitsigns select_hunk<CR>")
+
 			require("gitsigns").setup({
 				signs = {
 					add = {
@@ -122,90 +204,7 @@ return {
 					row = 0,
 					col = 1,
 				},
-				on_attach = function(bufnr)
-					local gs = require("gitsigns")
-
-					-- Navigation
-					nmap("]g", function()
-						if vim.wo.diff then
-							return "]g"
-						end
-						vim.schedule(function()
-							gs.next_hunk()
-						end)
-						return "<Ignore>"
-					end, { expr = true })
-
-					nmap("[g", function()
-						if vim.wo.diff then
-							return "[g"
-						end
-						vim.schedule(function()
-							gs.prev_hunk()
-						end)
-						return "<Ignore>"
-					end, { expr = true })
-
-					-- Actions
-					local keymap_g_n = {
-						mode = { "n" },
-						noremap = true,
-						{ "<leader>G", group = "git" },
-						{
-							"<leader>Ga",
-							function()
-								gs.setqflist(0)
-							end,
-							desc = "Current Buffer Changes",
-						},
-						{
-							"<leader>GA",
-							function()
-								gs.setqflist("all")
-							end,
-							desc = "All Changes",
-						},
-						{ "<leader>GS", gs.stage_buffer, desc = "Stage Buffer" },
-						{ "<leader>GR", gs.reset_buffer, desc = "Reset Buffer" },
-						{ "<leader>Gu", gs.undo_stage_hunk, desc = "Unstage Hunk" },
-						{ "<leader>GP", gs.preview_hunk, desc = "Preview Hunk" },
-						{ "<leader>Gp", gs.preview_hunk_inline, desc = "Preview Hunk" },
-						{
-							"<leader>Gb",
-							function()
-								gs.blame_line({ full = true })
-							end,
-							desc = "Blame Line (Signs)",
-						},
-						{ "<leader>Gd", gs.diffthis, desc = "Diff" },
-						{
-							"<leader>GD",
-							function()
-								gs.diffthis("~1", {
-									vertical = true,
-								})
-							end,
-							desc = "Diff Last Commit",
-						},
-						{ "<leader>Gtb", gs.toggle_current_line_blame, desc = "Toggle Blame Line" },
-						{ "<leader>Gtd", gs.toggle_deleted, desc = "Toggle Deleted" },
-						{ "<leader>Gtl", gs.toggle_linehl, desc = "Toggle Line HL" },
-					}
-
-					local keymap_g_v = {
-						mode = { "v" },
-						noremap = true,
-						{ "<leader>Gs", "<cmd>Gitsigns stage_hunk<CR>", desc = "Stage Hunk" },
-						{ "<leader>Gr", "<cmd>Gitsigns reset_hunk<CR>", desc = "Reset Hunk" },
-						{ "<leader>Gl", diffCurrentLines, desc = "Previous Versions" },
-					}
-
-					whichkey.add(keymap_g_n)
-					whichkey.add(keymap_g_v)
-
-					-- Text object
-					xnoremap("iG", ":<C-U>Gitsigns select_hunk<CR>")
-				end,
+				on_attach = function(bufnr) end,
 			})
 		end,
 	},
