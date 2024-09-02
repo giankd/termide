@@ -32,6 +32,15 @@ return {
 							require("noice").api.statusline.mode.get,
 							cond = require("noice").api.statusline.mode.has,
 						},
+						{
+							function()
+								local linters = require("lint").get_running()
+								if #linters == 0 then
+									return "󰦕 "
+								end
+								return "󱉶 " .. table.concat(linters, ", ")
+							end,
+						},
 						"filetype",
 					},
 					lualine_y = { "progress" },
