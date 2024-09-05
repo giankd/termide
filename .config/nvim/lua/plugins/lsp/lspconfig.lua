@@ -25,7 +25,7 @@ local server_configurations = {
 		},
 	},
 	-- Replaced by pmizio/typescript-tools
-	-- tsserver = {
+	-- ts_ls = {
 	-- 	settings = {
 	-- 		single_file_support = false,
 	-- 		init_options = {
