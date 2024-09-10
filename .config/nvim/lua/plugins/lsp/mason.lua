@@ -8,7 +8,7 @@ return {
 		},
 		opts = function(_, opts)
 			vim.list_extend(opts.ensure_installed or {}, {
-				"tsserver",
+				-- "tsserver",
 				"cssls",
 				"stylelint_lsp",
 				"tailwindcss",
@@ -47,7 +47,7 @@ return {
 			})
 			m_lspconfig.setup({
 				ensure_installed = {
-					"tsserver",
+					-- "tsserver",
 					"cssls",
 					"stylelint_lsp",
 					"tailwindcss",
