@@ -97,6 +97,15 @@ local load_default_config = function()
 
 	-- Disable sql omni completion, it is broken.
 	vim.g.loaded_sql_completion = 1
+
+	-- Folding
+	vim.opt.foldmethod = "expr"
+	vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+	vim.opt.foldlevel = 99
+	vim.opt.foldlevelstart = 99
+	vim.opt.foldenable = false
+	vim.opt.foldtext = ""
+	vim.opt.fillchars = "fold:·"
 end
 
 M.load_config = function()
