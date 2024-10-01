@@ -202,6 +202,7 @@ local server_configurations = {
 		},
 	},
 	rust_analyzer = {},
+	jsonls = {},
 	-- ADD MORE SERVER CONFIGS
 }
 
